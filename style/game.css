@@ -1,0 +1,228 @@
+/* ===== Game Container ===== */
+#game-container {
+    width: 100%;
+    text-align: center;
+    color: var(--text-black-700);
+}
+
+.game-intro {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 25px;
+}
+
+#game-board {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 800px;
+    height: 450px;
+    margin: 0 auto 20px;
+    border: 2px solid var(--bg-black-50);
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    position: relative;
+    padding: 20px;
+    box-sizing: border-box;
+    /* 3D-like perspective */
+    perspective: 1000px;
+}
+
+.team-area {
+    width: 100%;
+    height: 45%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#enemy-team {
+    transform: rotateX(15deg) translateZ(50px);
+}
+
+#player-team {
+    transform: rotateX(-10deg) translateZ(-30px) translateY(40px);
+}
+
+
+/* ===== Characters ===== */
+.character {
+    width: 80px;
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 5px;
+    box-sizing: border-box;
+    position: relative;
+    /* 3D transform for characters */
+    transform-style: preserve-3d;
+    transform: translateZ(0);
+}
+
+.character:hover {
+    transform: scale(1.05) translateZ(20px);
+    box-shadow: 0 0 20px var(--skin-color);
+}
+
+.character.selected {
+    border: 3px solid var(--skin-color);
+    box-shadow: 0 0 15px var(--skin-color);
+}
+
+.character.targetable:hover {
+    outline: 3px dashed #FFD700; /* Gold color */
+}
+
+.character.dead {
+    filter: grayscale(100%);
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+
+.char-icon {
+    font-size: 30px;
+    margin-bottom: 5px;
+}
+
+.char-name {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.hp-bar-container {
+    width: 90%;
+    height: 10px;
+    background-color: #555;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 5px;
+}
+
+.hp-bar {
+    height: 100%;
+    background-color: #28a745; /* Green */
+    transition: width 0.5s ease-in-out;
+}
+
+.hp-text {
+    font-size: 10px;
+    margin-top: 2px;
+}
+
+/* Player/Enemy specific styles */
+#player-team .character {
+    background-color: rgba(50, 100, 200, 0.5);
+    border: 2px solid rgba(100, 150, 255, 0.8);
+}
+
+#enemy-team .character {
+    background-color: rgba(200, 50, 50, 0.5);
+    border: 2px solid rgba(255, 100, 100, 0.8);
+}
+
+/* Effect styles */
+.effect {
+    position: absolute;
+    font-size: 16px;
+    font-weight: bold;
+    animation: fadeUp 1s forwards;
+    pointer-events: none;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+}
+
+.damage-effect {
+    color: #ff4d4d; /* Red */
+}
+
+.heal-effect {
+    color: #4dff4d; /* Green */
+}
+
+.shield-effect {
+    color: #4d4dff; /* Blue */
+}
+
+/* ===== Game Controls ===== */
+#game-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+#message-log {
+    flex-grow: 1;
+    text-align: left;
+    padding: 15px;
+    background-color: var(--bg-black-100);
+    border-radius: 5px;
+    height: 50px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#skill-buttons {
+    display: flex;
+    gap: 10px;
+    padding-left: 20px;
+}
+
+.skill-btn {
+    padding: 10px 15px;
+    font-size: 14px;
+    font-weight: bold;
+    border: 2px solid var(--skin-color);
+    background-color: transparent;
+    color: var(--skin-color);
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.skill-btn:hover, .skill-btn.selected {
+    background-color: var(--skin-color);
+    color: #fff;
+}
+
+.skill-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#restart-btn {
+    display: none; /* Initially hidden */
+    margin: 20px auto 0;
+    padding: 12px 25px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid var(--skin-color);
+    background-color: var(--skin-color);
+    color: #fff;
+}
+
+#restart-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px var(--skin-color);
+}

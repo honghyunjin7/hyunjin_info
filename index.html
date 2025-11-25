@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="./skins/color-4.css" class="alternate-style" title="color-4" disabled>
   <link rel="stylesheet" href="./skins/color-5.css" class="alternate-style" title="color-5" disabled>
   <link rel="stylesheet" href="./style/style-switcher.css">
+  <link rel="stylesheet" href="./style/game.css">
   <title>Portfolio</title>
 </head>
 <body class="dark">
@@ -366,17 +367,20 @@
             </div>
           </div>
           <div class="row">
-            <!-- ===== Service iTem Start ===== -->
-            <div class="service-item padd-15" style="flex: 0 0 100%; max-width: 100%;">
-              <div class="service-item-inner">
-                <div class="icon">
-                  <i class="fa fa-lightbulb"></i>
-                </div>
-                <h4>팀 기반 3D PVP 게임</h4>
-                <p>각기 다른 능력을 가진 캐릭터들이 한 팀이 되어, 전략적인 협력을 통해 승리를 쟁취하는 3D PVP 게임을 만들고 싶습니다. 플레이어들이 팀워크를 통해 최고의 경험을 하고, 협동하여 이겼을 때의 기쁨을 함께 나누는 게임을 만드는 것이 저의 목표입니다. 단순한 피지컬을 넘어, 팀원과의 소통과 순간적인 판단이 승패를 가르는 깊이 있는 전투 경험을 구현하고 싶습니다.</p>
+            <div id="game-container" class="padd-15">
+              <p class="game-intro">
+                <strong>'팀 기반 3D PVP'</strong> 컨셉을 표현한 미니게임입니다.<br>
+                아군(파랑) 캐릭터를 클릭하여 스킬을 선택하고, 타겟을 클릭하여 적군(빨강)을 모두 물리치세요!
+              </p>
+              <div id="game-board">
+                  <div id="enemy-team" class="team-area"></div>
+                  <div id="player-team" class="team-area"></div>
+              </div>
+              <div id="game-controls">
+                  <div id="message-log">게임 시작! 당신의 턴입니다.</div>
+                  <div id="skill-buttons"></div>
               </div>
             </div>
-            <!-- ===== Service iTem End ===== -->
           </div>
         </div>
       </section>
@@ -514,6 +518,7 @@
   <script src="./js/style-switcher.js"></script>
   <!-- ===== Custom JS ===== -->
   <script src="./js/main.js"></script>
+  <script src="./js/dream-game.js"></script>
 
 </body>
 </html>
