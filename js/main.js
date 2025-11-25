@@ -1,20 +1,14 @@
 
 
 
-/* ===== Role Cycler Animation ===== */
-document.addEventListener('DOMContentLoaded', () => {
-    const roleCycler = document.getElementById('role-cycler');
-    if (roleCycler) {
-        const roles = ["Gameplay Architect", "Core System Engineer", "Simulation Engineer"];
-        let currentRoleIndex = 0;
-
-        roleCycler.addEventListener('mouseover', () => {
-            currentRoleIndex = (currentRoleIndex + 1) % roles.length;
-            roleCycler.textContent = roles[currentRoleIndex];
-        });
-    }
-});
-
+/* ===== typing animation ===== */
+let typed = new Typed(".typing", {
+  strings: ["", "Product Manager", "Designer", "Programmer", "Publisher", "Marketer "
+],
+  typeSpeed: 100,
+  BackSpeed: 60,
+  loop: true
+})
 /* ===== Aside ===== */
 const nav = document.querySelector(".nav"),
   navList = nav.querySelectorAll("li"),
