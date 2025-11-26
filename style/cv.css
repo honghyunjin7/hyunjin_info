@@ -37,6 +37,15 @@ h2, h3, h4 {
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
+.my-face-img {
+    max-width: 150px; /* Adjust as needed */
+    height: auto;
+    border-radius: 8px; /* Slightly rounded corners */
+    margin-top: 20px; /* Space from the text above */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    display: block; /* Ensures it takes its own line */
+}
+
 .table {
     border-collapse: collapse;
     width: 100%;
