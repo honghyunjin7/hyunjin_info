@@ -16,6 +16,8 @@
   <link rel="stylesheet" href="./skins/color-5.css" class="alternate-style" title="color-5" disabled>
   <link rel="stylesheet" href="./style/style-switcher.css">
   <link rel="stylesheet" href="./style/game.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cannon.js/0.6.2/cannon.min.js"></script>
   <title>Portfolio</title>
 </head>
 <body class="dark">
@@ -293,89 +295,42 @@
           </div>
           <div class="row">
             <div class="portfolio-heading padd-15">
-              <h3 style="font-size: 24px; margin-bottom: 20px;">Toy Projects & GameDev Learning</h3>
+              <h3 style="font-size: 24px; margin-bottom: 20px;">Team-based Game Projects</h3>
             </div>
           </div>
-
           <div class="row">
-            <!-- portfolio Item Start -->
-            <div class="portfolio-item padd-15">
+            <!-- Game 1: Capture the Flag -->
+            <div class="portfolio-item padd-15" style="width: 100%;">
               <div class="portfolio-item-inner shadow-dark">
-                <div class="portfolio-img">
-                  <img src="images/portfolio_js_tictactoe.jpeg" alt="틱택토 게임">
+                <div class="portfolio-info" style="padding-bottom: 20px;">
+                  <h4>3D 깃발 뺏기 (Capture the Flag)</h4>
+                  <p>두 팀으로 나뉘어 상대 팀의 깃발을 훔쳐오는 게임입니다. 키보드 화살표 키로 파란색 플레이어를 움직여보세요.</p>
                 </div>
-                <div class="portfolio-info">
-                  <h4>JS 미니게임: 틱택토</h4>
-                  <p>자바스크립트로 구현한 틱택토 게임입니다. 기본적인 게임 로직과 UI 구현을 학습했습니다.</p>
-                </div>
+                <div id="capture-the-flag-container" style="width: 100%; height: 400px; background: #000;"></div>
               </div>
             </div>
-            <!-- portfolio Item End -->
-            <!-- portfolio Item Start -->
-            <div class="portfolio-item padd-15">
+
+            <!-- Game 2: King of the Hill -->
+            <div class="portfolio-item padd-15" style="width: 100%;">
               <div class="portfolio-item-inner shadow-dark">
-                <div class="portfolio-img">
-                  <img src="images/portfolio_js_mine.jpg" alt="지뢰찾기 게임">
+                <div class="portfolio-info" style="padding-bottom: 20px;">
+                  <h4>3D 거점 점령전 (King of the Hill)</h4>
+                  <p>중앙 거점을 차지하기 위해 경쟁하는 게임입니다. 키보드 화살표 키로 플레이어를 움직여 중앙의 회색 영역을 점령해보세요.</p>
                 </div>
-                <div class="portfolio-info">
-                  <h4>JS 미니게임: 지뢰찾기</h4>
-                  <p>재귀 함수를 이용한 지뢰찾기 게임입니다. 복잡한 로직 구현에 대한 이해를 높였습니다.</p>
-                </div>
+                <div id="king-of-the-hill-container" style="width: 100%; height: 400px; background: #000;"></div>
               </div>
             </div>
-            <!-- portfolio Item End -->
-            <!-- portfolio Item Start -->
-            <div class="portfolio-item padd-15">
+
+            <!-- Game 3: Space Ball -->
+            <div class="portfolio-item padd-15" style="width: 100%;">
               <div class="portfolio-item-inner shadow-dark">
-                <div class="portfolio-img">
-                  <img src="images/portfolio_js_2048.jpg" alt="2048 게임">
+                <div class="portfolio-info" style="padding-bottom: 20px;">
+                  <h4>3D 우주 스포츠 (Space Ball)</h4>
+                  <p>물리 엔진이 적용된 공간에서 공을 쳐서 골을 넣는 게임입니다. 키보드 화살표 키로 차량을 움직여 공을 쳐보세요.</p>
                 </div>
-                <div class="portfolio-info">
-                  <h4>JS 미니게임: 2048</h4>
-                  <p>키보드 이벤트를 처리하고 배열을 다루어 2048 게임을 만들었습니다.</p>
-                </div>
+                <div id="space-ball-container" style="width: 100%; height: 400px; background: #000;"></div>
               </div>
             </div>
-            <!-- portfolio Item End -->
-            <!-- portfolio Item Start -->
-            <div class="portfolio-item padd-15">
-              <div class="portfolio-item-inner shadow-dark">
-                <div class="portfolio-img">
-                  <img src="images/portfolio_MeteorShower.jpeg" alt="Unity 학습">
-                </div>
-                <div class="portfolio-info">
-                  <h4>Unity 엔진 학습 (진행중)</h4>
-                  <p>C#과 Unity 엔진을 학습하며 2D 플랫포머 게임을 만들고 있습니다.</p>
-                </div>
-              </div>
-            </div>
-            <!-- portfolio Item End -->
-            <!-- portfolio Item Start -->
-            <div class="portfolio-item padd-15">
-              <div class="portfolio-item-inner shadow-dark">
-                <div class="portfolio-img">
-                  <img src="images/portfolio_LightButton.jpeg" alt="게임 잼">
-                </div>
-                <div class="portfolio-info">
-                  <h4>게임 잼 참가 (예정)</h4>
-                  <p>곧 열리는 게임 잼에 참가하여 짧은 기간 내에 게임을 완성하는 경험을 할 예정입니다.</p>
-                </div>
-              </div>
-            </div>
-            <!-- portfolio Item End -->
-            <!-- portfolio Item Start -->
-            <div class="portfolio-item padd-15">
-              <div class="portfolio-item-inner shadow-dark">
-                <div class="portfolio-img">
-                  <img src="images/portfolio_TextScratch.jpeg" alt="고전 게임 클론">
-                </div>
-                <div class="portfolio-info">
-                  <h4>고전 게임 클론: 벽돌깨기</h4>
-                  <p>게임 개발의 기본기를 다지기 위해 '벽돌깨기'를 만들며 게임 루프와 충돌 처리를 학습했습니다.</p>
-                </div>
-              </div>
-            </div>
-            <!-- portfolio Item End -->
           </div>
         </div>
       </section>
@@ -546,6 +501,11 @@
   <!-- ===== Custom JS ===== -->
   <script src="./js/main.js"></script>
   <script src="./js/dream-game.js"></script>
+
+  <!-- ===== Portfolio Game Scripts ===== -->
+  <script src="./js/capture-the-flag.js"></script>
+  <script src="./js/king-of-the-hill.js"></script>
+  <script src="./js/space-ball.js"></script>
 
 </body>
 </html>
