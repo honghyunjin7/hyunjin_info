@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', () => {
     // Scene setup
     const container = document.getElementById('capture-the-flag-container');
@@ -7,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x222222);
     const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer();
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(container.clientWidth, container.clientHeight);
     container.appendChild(renderer.domElement);
 
@@ -47,12 +46,18 @@ document.addEventListener('DOMContentLoaded', () => {
     redFlag.position.set(12, 1, 0);
     scene.add(redFlag);
 
-    // Player
+    // Player 1 (Blue)
     const playerGeometry = new THREE.BoxGeometry(1, 1, 1);
-    const playerMaterial = new THREE.MeshStandardMaterial({ color: 0x00aaff });
-    const player = new THREE.Mesh(playerGeometry, playerMaterial);
-    player.position.y = 0.5;
-    scene.add(player);
+    const player1Material = new THREE.MeshStandardMaterial({ color: 0x00aaff });
+    const player1 = new THREE.Mesh(playerGeometry, player1Material);
+    player1.position.set(-10, 0.5, 0);
+    scene.add(player1);
+
+    // Player 2 (Red)
+    const player2Material = new THREE.MeshStandardMaterial({ color: 0xff4444 });
+    const player2 = new THREE.Mesh(playerGeometry, player2Material);
+    player2.position.set(10, 0.5, 0);
+    scene.add(player2);
 
     camera.position.set(0, 15, 12);
     camera.lookAt(0, 0, 0);
@@ -64,21 +69,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const playerSpeed = 0.1;
 
-    function updatePlayerPosition() {
-        if (keys['ArrowUp']) player.position.z -= playerSpeed;
-        if (keys['ArrowDown']) player.position.z += playerSpeed;
-        if (keys['ArrowLeft']) player.position.x -= playerSpeed;
-        if (keys['ArrowRight']) player.position.x += playerSpeed;
+    function updatePlayersPosition() {
+        // Player 1 (Arrows)
+        if (keys['ArrowUp']) player1.position.z -= playerSpeed;
+        if (keys['ArrowDown']) player1.position.z += playerSpeed;
+        if (keys['ArrowLeft']) player1.position.x -= playerSpeed;
+        if (keys['ArrowRight']) player1.position.x += playerSpeed;
 
-        // Simple boundary check
-        player.position.x = Math.max(-14.5, Math.min(14.5, player.position.x));
-        player.position.z = Math.max(-9.5, Math.min(9.5, player.position.z));
+        // Player 2 (WASD)
+        if (keys['KeyW']) player2.position.z -= playerSpeed;
+        if (keys['KeyS']) player2.position.z += playerSpeed;
+        if (keys['KeyA']) player2.position.x -= playerSpeed;
+        if (keys['KeyD']) player2.position.x += playerSpeed;
+
+        // Simple boundary checks
+        [player1, player2].forEach(p => {
+            p.position.x = Math.max(-14.5, Math.min(14.5, p.position.x));
+            p.position.z = Math.max(-9.5, Math.min(9.5, p.position.z));
+        });
     }
     
     // Animation loop
     function animate() {
         requestAnimationFrame(animate);
-        updatePlayerPosition();
+        updatePlayersPosition();
         renderer.render(scene, camera);
     }
 

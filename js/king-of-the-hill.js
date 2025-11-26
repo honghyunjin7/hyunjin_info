@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', () => {
     // Scene setup
     const container = document.getElementById('king-of-the-hill-container');
@@ -7,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x222222);
     const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer();
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(container.clientWidth, container.clientHeight);
     container.appendChild(renderer.domElement);
 
@@ -28,19 +27,25 @@ document.addEventListener('DOMContentLoaded', () => {
     // Hill
     const hillGeometry = new THREE.CylinderGeometry(4, 4, 0.2, 32);
     const neutralMaterial = new THREE.MeshStandardMaterial({ color: 0x888888 });
-    const capturedMaterial = new THREE.MeshStandardMaterial({ color: 0x00aaff, emissive: 0x0077aa });
+    const player1CapturedMaterial = new THREE.MeshStandardMaterial({ color: 0x00aaff, emissive: 0x0077aa });
+    const player2CapturedMaterial = new THREE.MeshStandardMaterial({ color: 0xff4444, emissive: 0xcc0000 });
     const hill = new THREE.Mesh(hillGeometry, neutralMaterial);
     hill.position.y = 0.1;
     scene.add(hill);
 
-    // Player
+    // Players
     const playerGeometry = new THREE.BoxGeometry(1, 1, 1);
-    const playerMaterial = new THREE.MeshStandardMaterial({ color: 0x00aaff });
-    const player = new THREE.Mesh(playerGeometry, playerMaterial);
-    player.position.y = 0.5;
-    scene.add(player);
+    const player1Material = new THREE.MeshStandardMaterial({ color: 0x00aaff });
+    const player1 = new THREE.Mesh(playerGeometry, player1Material);
+    player1.position.set(5, 0.5, 0);
+    scene.add(player1);
 
-    camera.position.set(0, 10, 10);
+    const player2Material = new THREE.MeshStandardMaterial({ color: 0xff4444 });
+    const player2 = new THREE.Mesh(playerGeometry, player2Material);
+    player2.position.set(-5, 0.5, 0);
+    scene.add(player2);
+
+    camera.position.set(0, 12, 12);
     camera.lookAt(0, 0, 0);
 
     // Player Movement
@@ -50,31 +55,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const playerSpeed = 0.1;
 
-    function updatePlayerPosition() {
-        if (keys['ArrowUp']) player.position.z -= playerSpeed;
-        if (keys['ArrowDown']) player.position.z += playerSpeed;
-        if (keys['ArrowLeft']) player.position.x -= playerSpeed;
-        if (keys['ArrowRight']) player.position.x += playerSpeed;
-        
-        // Simple boundary check
-        player.position.x = Math.max(-9.5, Math.min(9.5, player.position.x));
-        player.position.z = Math.max(-9.5, Math.min(9.5, player.position.z));
+    function updatePlayersPosition() {
+        // Player 1 (Arrows)
+        if (keys['ArrowUp']) player1.position.z -= playerSpeed;
+        if (keys['ArrowDown']) player1.position.z += playerSpeed;
+        if (keys['ArrowLeft']) player1.position.x -= playerSpeed;
+        if (keys['ArrowRight']) player1.position.x += playerSpeed;
+
+        // Player 2 (WASD)
+        if (keys['KeyW']) player2.position.z -= playerSpeed;
+        if (keys['KeyS']) player2.position.z += playerSpeed;
+        if (keys['KeyA']) player2.position.x -= playerSpeed;
+        if (keys['KeyD']) player2.position.x += playerSpeed;
+
+        // Boundary checks
+        [player1, player2].forEach(p => {
+            p.position.x = Math.max(-9.5, Math.min(9.5, p.position.x));
+            p.position.z = Math.max(-9.5, Math.min(9.5, p.position.z));
+        });
     }
 
     // Game Logic
     function checkHillCapture() {
-        const distance = player.position.distanceTo(hill.position);
-        if (distance < 4) { // Player is on the hill
-            hill.material = capturedMaterial;
+        const p1OnHill = player1.position.distanceTo(hill.position) < 4;
+        const p2OnHill = player2.position.distanceTo(hill.position) < 4;
+
+        if (p1OnHill && !p2OnHill) {
+            hill.material = player1CapturedMaterial;
+        } else if (!p1OnHill && p2OnHill) {
+            hill.material = player2CapturedMaterial;
         } else {
-            hill.material = neutralMaterial;
+            hill.material = neutralMaterial; // Contested or empty
         }
     }
 
     // Animation loop
     function animate() {
         requestAnimationFrame(animate);
-        updatePlayerPosition();
+        updatePlayersPosition();
         checkHillCapture();
         renderer.render(scene, camera);
     }
