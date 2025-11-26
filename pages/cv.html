@@ -58,37 +58,53 @@
       </table>
     </section>
 
-    <!-- 경력 기술서 -->
+    <!-- Team-based Game Projects -->
     <section class="cv-section">
-      <h2 class="text-2xl font-bold mb-3">경력 기술서</h2>
-        <div class="space-y-6">
-          <div>
-            <h4 class="text-lg font-semibold">[핵심 게임플레이 시스템 구현]</h4>
-            <ul class="list-disc mt-2">
-              <li><strong>정교한 슈팅 메커니즘:</strong> 탄도학(Projectile), 히트스캔(Hit-scan) 이해 및 반동(Recoil), 탄 퍼짐(Spread) 시스템 구현 경험</li>
-              <li><strong>전술적 캐릭터 움직임:</strong> 린(Lean), 피킹(Peeking), 슬라이딩 등 특수 이동 기술 및 엄폐물 상호작용(Cover System) 구현</li>
-              <li><strong>스킬 및 장비 시스템:</strong> 캐릭터별 고유 스킬(쿨다운, 효과 범위) 및 투척 무기 포물선 궤적 계산 및 시각화 경험</li>
-            </ul>
-          </div>
-          <div>
-            <h4 class="text-lg font-semibold">[멀티플레이어 및 네트워크 환경 이해]</h4>
-            <ul class="list-disc mt-2">
-              <li><strong>클라이언트-서버 아키텍처:</strong> 서버 권위(Server-Authoritative) 모델 기반 개발 및 클라이언트 예측(Client-Side Prediction), 서버 보정(Server Reconciliation) 경험</li>
-              <li><strong>네트워크 동기화:</strong> 플레이어 상태의 실시간 동기화, 최적화 및 랙 보상(Lag Compensation) 기법 이해 및 구현 경험</li>
-            </ul>
-          </div>
-          <div>
-            <h4 class="text-lg font-semibold">[3D 엔진 활용 및 성능 최적화]</h4>
-            <ul class="list-disc mt-2">
-                <li><strong>물리 및 애니메이션:</strong> 레이캐스트(Raycast)를 이용한 피격 판정, 애니메이션 상태 머신, 블렌드 스페이스 활용</li>
-                <li><strong>성능 최적화:</strong> 드로우 콜, 메모리 사용량 등 병목 현상 분석 및 LOD, 컬링(Culling) 등 렌더링 최적화 기법 적용</li>
-            </ul>
-          </div>
-          <div>
-            <h4 class="text-lg font-semibold">[개인 프로젝트 (예시)]</h4>
-            <p class="mt-2">Unreal Engine 5의 GAS(Gameplay Ability System)를 활용하여 3가지 고유 스킬을 가진 캐릭터를 구현한 1인칭 슈팅 프로젝트를 진행했습니다. 서버 권위 모델을 적용하여 모든 스킬 판정이 서버에서 이루어지도록 설계하여 치팅에 강한 구조를 만들었습니다. (GitHub: <a href="https://honghyunjin7.github.io/hyunjin_info/" class="text-blue-600 hover:underline">honghyunjin7.github.io/hyunjin_info/</a>)</p>
-          </div>
+      <h2 class="text-2xl font-bold mb-3">Team-based Game Projects</h2>
+      <div class="space-y-8">
+        <div>
+          <h3 class="text-xl font-semibold">3D 깃발 뺏기 (Capture the Flag)</h3>
+          <p class="mt-1">두 팀으로 나뉘어 상대 팀의 깃발을 훔쳐오는 클래식한 PVP 게임입니다.</p>
+          <ul class="list-disc mt-2 pl-5">
+            <li><strong>주요 역할:</strong> 게임플레이 로직 구현</li>
+            <li><strong>개발 내용:</strong>
+              <ul class="list-disc mt-1 pl-5">
+                <li>플레이어 이동 및 충돌 처리 시스템 개발</li>
+                <li>깃발 획득, 탈취, 기지 복귀 등 게임 상태 관리 로직 구현</li>
+                <li>팀 구분 및 승리/패배 조건 판정 시스템 설계</li>
+              </ul>
+            </li>
+          </ul>
         </div>
+        <div>
+          <h3 class="text-xl font-semibold">3D 거점 점령전 (King of the Hill)</h3>
+          <p class="mt-1">중앙 거점을 차지하고 유지하여 점수를 획득하는 팀 경쟁 게임입니다.</p>
+          <ul class="list-disc mt-2 pl-5">
+            <li><strong>주요 역할:</strong> 게임 시스템 및 UI 프로그래밍</li>
+            <li><strong>개발 내용:</strong>
+              <ul class="list-disc mt-1 pl-5">
+                <li>특정 영역(거점) 내 플레이어 감지 및 점유 시간 계산 로직 구현</li>
+                <li>팀별 점수 및 거점 점령 상태를 표시하는 UI 시스템 개발</li>
+                <li>다수 플레이어 간의 상호작용 및 경쟁 구도 형성 메커니즘 설계</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold">3D 우주 스포츠 (Space Ball)</h3>
+          <p class="mt-1">물리 엔진이 적용된 무중력 공간에서 공을 상대 골대에 넣는 스포츠 게임입니다.</p>
+          <ul class="list-disc mt-2 pl-5">
+            <li><strong>주요 역할:</strong> 물리 기반 플레이어 및 오브젝트 상호작용 구현</li>
+            <li><strong>개발 내용:</strong>
+              <ul class="list-disc mt-1 pl-5">
+                <li>물리 기반 차량(플레이어) 움직임 및 조작 시스템 개발</li>
+                <li>공과 플레이어, 환경 간의 사실적인 물리적 상호작용 구현</li>
+                <li>골 판정 및 게임 재시작 로직 등 핵심 게임 루프 설계</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
     </section>
 
     <!-- 자기소개서 -->
@@ -96,25 +112,16 @@
       <h2 class="text-2xl font-bold mb-3">자기소개서</h2>
       <div class="space-y-6 bg-white p-6 rounded-lg shadow-sm">
         <div>
-          <h4 class="text-lg font-semibold">[사용가능한 툴 및 개발 가능 기술]</h4>
-          <p class="mt-2">
-            - <strong>Game Engines:</strong> Unreal Engine, Unity<br>
-            - <strong>Languages:</strong> C++, C#, Python (for scripting)<br>
-            - <strong>Concepts:</strong> Gameplay Ability Systems (e.g., UE GAS), Client-Server Networking, Lag Compensation, 3D Math, Physics, Animation Systems<br>
-            - <strong>Tools:</strong> Git, Perforce, Visual Studio, Rider
-          </p>
+          <h4 class="text-lg font-semibold">[개발 가치관: 함께 승리하는 즐거움]</h4>
+          <p class="mt-2">저는 팀원들과 협력하여 승리를 쟁취하는 3D PVP 게임을 즐겨 합니다. 이러한 경험을 바탕으로, **"플레이어들이 팀워크를 통해 최고의 경험을 하고, 협동하여 이겼을 때의 기쁨을 함께 나누는 게임"**을 만드는 것을 목표로 하고 있습니다. 단순히 기술을 구현하는 것을 넘어, 플레이어들이 서로 소통하고 전략을 세우며 함께 성장하는 재미를 느낄 수 있는 게임을 만들고 싶습니다.</p>
         </div>
         <div>
-          <h4 class="text-lg font-semibold">[성장 과정]</h4>
-          <p class="mt-2">팀원들과 함께 전략을 세우고 승리했을 때의 기쁨을 안겨주는 전술 FPS 게임에 깊은 매력을 느껴왔습니다. 단순히 게임을 즐기는 것을 넘어, '어떻게 이런 재미를 만들어낼까?'라는 호기심이 생겼고, C++와 Unreal Engine을 독학하며 저만의 게임을 만들기 시작했습니다. 탄도학과 반동 시스템을 구현하며 짜릿한 손맛을 만들어내는 과정을 배웠고, 클라이언트-서버 모델을 공부하며 여러 플레이어가 함께 즐기는 공간을 만드는 기술의 중요성을 깨달았습니다. 이 과정에서 겪은 수많은 버그와 문제들은 저를 더 단단하게 만드는 계기가 되었고, 이제는 플레이어들에게 최고의 경험을 선사하는 프로그래머가 되고 싶다는 열정으로 가득 차 있습니다.</p>
+          <h4 class="text-lg font-semibold">[경험과 강점: 아이디어를 현실로 만드는 실행력]</h4>
+          <p class="mt-2">'깃발 뺏기', '거점 점령전', '우주 스포츠' 등 세 가지 팀 기반 3D 게임을 직접 구현하며 아이디어를 실제 플레이 가능한 게임으로 만드는 경험을 쌓았습니다. 이 과정에서 게임의 핵심 규칙을 설계하고, 다양한 플레이어 상호작용을 구현하며 복잡한 게임 로직을 해결하는 문제 해결 능력을 길렀습니다. 특히, 여러 플레이어가 하나의 목표를 위해 협동하는 과정에서 발생하는 다양한 변수들을 제어하고 안정적인 플레이 경험을 제공하는 기술적 노하우를 익혔습니다. 이는 기획자의 의도를 정확하게 파악하고 기술적 한계를 넘어 최고의 게임 경험을 만들어내는 저의 가장 큰 강점입니다.</p>
         </div>
         <div>
-          <h4 class="text-lg font-semibold">[성격과 강점]</h4>
-          <p class="mt-2">복잡한 게임 로직의 문제를 해결하는 과정에서 큰 성취감을 느낍니다. 특히 팀 기반 게임은 여러 시스템이 맞물려 돌아가기에, 논리적인 사고와 끈기가 저의 가장 큰 강점이라고 생각합니다. 또한, 저는 '함께'의 가치를 중요하게 생각합니다. 좋은 게임은 뛰어난 팀워크에서 나온다고 믿으며, 동료들과 적극적으로 소통하고 코드 리뷰를 통해 서로 배우고 발전하는 문화를 지향합니다. FPS 장르에 대한 깊은 애정을 바탕으로, 기획자와 디자이너의 의도를 정확히 파악하고 기술적으로 구현하여 최고의 시너지를 만들 자신이 있습니다.</p>
-        </div>
-        <div>
-          <h4 class="text-lg font-semibold">[입사후 포부]</h4>
-          <p class="mt-2">입사 초기에는 팀의 개발 프로세스와 코드 베이스를 빠르게 습득하여, 주어진 게임플레이 기능을 안정적으로 구현하는 데 집중하겠습니다. 동료들에게 신뢰를 주는 팀원이 되어, 팀의 목표 달성에 기여하고 싶습니다. 장기적으로는 단순히 주어진 기능을 구현하는 것을 넘어, 전술적 깊이를 더하고 플레이어들에게 기억에 남는 순간을 선사하는 핵심 시스템을 설계하고 개발하는 게임플레이 프로그래머로 성장하고 싶습니다. 끊임없이 새로운 기술을 배우고 동료들과 지식을 공유하며, 귀사와 함께 성장하는 개발자가 되겠습니다.</p>
+          <h4 class="text-lg font-semibold">[입사 후 포부: 팀과 함께 성장하는 개발자]</h4>
+          <p class="mt-2">귀사에 입사하여, 저의 개발 경험과 팀워크에 대한 가치를 바탕으로 플레이어들에게 협동의 즐거움을 선사하는 프로젝트에 기여하고 싶습니다. 단기적으로는 팀의 개발 문화와 시스템을 빠르게 익혀 안정적인 게임플레이 기능을 구현하는 데 집중하고, 장기적으로는 팀원들과 함께 플레이어들이 오랫동안 기억할 수 있는 멋진 팀 기반 게임을 만들어나가고 싶습니다. 끊임없이 배우고 동료들과 소통하며 함께 성장하는 개발자가 되겠습니다.</p>
         </div>
       </div>
     </section>
