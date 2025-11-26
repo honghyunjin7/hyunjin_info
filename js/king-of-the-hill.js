@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', () => {
     // Scene setup
     const container = document.getElementById('king-of-the-hill-container');
