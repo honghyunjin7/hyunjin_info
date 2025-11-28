@@ -46,6 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
     redFlag.position.set(12, 1, 0);
     scene.add(redFlag);
 
+    blueFlag.originalPosition = blueFlag.position.clone();
+    redFlag.originalPosition = redFlag.position.clone();
+
     // Player 1 (Blue)
     const playerGeometry = new THREE.BoxGeometry(1, 1, 1);
     const player1Material = new THREE.MeshStandardMaterial({ color: 0x00aaff });
@@ -62,10 +65,53 @@ document.addEventListener('DOMContentLoaded', () => {
     camera.position.set(0, 15, 12);
     camera.lookAt(0, 0, 0);
 
-    // Player Movement
+    // Player Movement & Interaction
     const keys = {};
-    document.addEventListener('keydown', (e) => keys[e.code] = true);
-    document.addEventListener('keyup', (e) => keys[e.code] = false);
+    const pickupDistance = 1.5;
+
+    document.addEventListener('keydown', (e) => {
+        keys[e.code] = true;
+
+        // Player 1 (Right Shift) for Red Flag
+        if (e.code === 'ShiftRight') {
+            if (redFlag.parent === player1) {
+                // Drop the flag
+                player1.remove(redFlag);
+                scene.add(redFlag);
+                redFlag.position.copy(redFlag.originalPosition);
+            } else {
+                // Try to pick up
+                const distance = player1.position.distanceTo(redFlag.position);
+                if (redFlag.parent === scene && distance < pickupDistance) {
+                    scene.remove(redFlag);
+                    player1.add(redFlag);
+                    redFlag.position.set(0, 1, 0); // Position relative to player
+                }
+            }
+        }
+
+        // Player 2 (Left Shift) for Blue Flag
+        if (e.code === 'ShiftLeft') {
+            if (blueFlag.parent === player2) {
+                // Drop the flag
+                player2.remove(blueFlag);
+                scene.add(blueFlag);
+                blueFlag.position.copy(blueFlag.originalPosition);
+            } else {
+                // Try to pick up
+                const distance = player2.position.distanceTo(blueFlag.position);
+                if (blueFlag.parent === scene && distance < pickupDistance) {
+                    scene.remove(blueFlag);
+                    player2.add(blueFlag);
+                    blueFlag.position.set(0, 1, 0); // Position relative to player
+                }
+            }
+        }
+    });
+
+    document.addEventListener('keyup', (e) => {
+        keys[e.code] = false;
+    });
 
     const playerSpeed = 0.1;
 
@@ -88,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
             p.position.z = Math.max(-9.5, Math.min(9.5, p.position.z));
         });
     }
-    
+
     // Animation loop
     function animate() {
         requestAnimationFrame(animate);
