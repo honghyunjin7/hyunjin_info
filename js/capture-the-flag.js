@@ -8,7 +8,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const countdownOverlay = document.getElementById('countdown-overlay');
     const countdownText = document.getElementById('countdown-text');
 
-    container.addEventListener('mouseover', () => window.activeGame = gameId);
+    container.addEventListener('mouseover', () => {
+        window.activeGame = gameId;
+        if (!countdownStarted) {
+            startCountdown();
+            countdownStarted = true;
+        }
+    });
     container.addEventListener('mouseout', () => window.activeGame = null);
 
     const scene = new THREE.Scene();
@@ -76,6 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Game State
     let gameOver = false;
     let gameStarted = false; // New flag for game start
+    let countdownStarted = false; // New flag to ensure countdown runs only once
 
     // Player Movement & Interaction
     const keys = {};
@@ -212,7 +219,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     animate();
-    startCountdown(); // Start the countdown when the game loads
 
     // Handle window resize
     window.addEventListener('resize', () => {
