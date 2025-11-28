@@ -7,12 +7,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const blueWinScreen = document.getElementById('koth-blue-win-screen');
     const redWinScreen = document.getElementById('koth-red-win-screen');
 
-    // --- Game State ---
+    // Game State
     let gameOver = false;
     // New variables for capture duration
     let player1CaptureTime = 0;
     let player2CaptureTime = 0;
     const captureDuration = 3; // seconds
+    let player1IsGrounded = false; // Grounded state for jump
+    let player2IsGrounded = false; // Grounded state for jump
+    const jumpForce = 15; // Force applied for jump
 
     window.activeGame = null;
 
@@ -135,6 +138,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (['KeyW', 'KeyS', 'KeyA', 'KeyD'].includes(e.code)) {
             player2KeyPresses.push(now);
         }
+
+        // Player 1 Jump (Slash key)
+        if (e.code === 'Slash' && player1IsGrounded) {
+            player1Body.velocity.y = jumpForce;
+            player1IsGrounded = false; // Set to false immediately after jump
+        }
+        // Player 2 Jump (Left Shift)
+        if (e.code === 'ShiftLeft' && player2IsGrounded) {
+            player2Body.velocity.y = jumpForce;
+            player2IsGrounded = false; // Set to false immediately after jump
+        }
     });
 
     document.addEventListener('keyup', (e) => {
@@ -179,6 +193,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 player2Body.applyImpulse(direction.scale(pushImpulse), player2Body.position);
             } else {
                 player1Body.applyImpulse(direction.scale(-pushImpulse), player1Body.position);
+            }
+        }
+        // Check if player 1 is grounded
+        if (event.body === groundBody) {
+            const contact = event.contact;
+            // Ensure contact normal points significantly upwards (player on top of ground)
+            if (contact.ni.y > 0.5) {
+                player1IsGrounded = true;
+            }
+        }
+    });
+
+    player2Body.addEventListener('collide', (event) => {
+        if (gameOver) return;
+        // Check if player 2 is grounded
+        if (event.body === groundBody) {
+            const contact = event.contact;
+            if (contact.ni.y > 0.5) {
+                player2IsGrounded = true;
             }
         }
     });
