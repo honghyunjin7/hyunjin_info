@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
     scene.add(ceilingMesh);
 
     // Walls
-    const wallThickness = 0.5;
+    const wallThickness = 1.0;
 
     // Wall Left (Negative X)
     const wallLeftShape = new CANNON.Box(new CANNON.Vec3(wallThickness / 2, fieldHeight / 2, fieldLength / 2));
