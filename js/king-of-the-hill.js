@@ -11,8 +11,24 @@ document.addEventListener('DOMContentLoaded', () => {
     let gameOver = false;
     window.activeGame = null;
 
-    container.addEventListener('mouseover', () => window.activeGame = gameId);
-    container.addEventListener('mouseout', () => window.activeGame = null);
+    container.addEventListener('mouseover', () => {
+        window.activeGame = gameId;
+        console.log(`King of the Hill: Mouse Over. activeGame set to: ${window.activeGame}`);
+    });
+    container.addEventListener('mouseout', () => {
+        window.activeGame = null;
+        console.log(`King of the Hill: Mouse Out. activeGame set to: ${window.activeGame}`);
+    });
+
+    // Add focus/blur listeners for robustness
+    container.addEventListener('focus', () => {
+        window.activeGame = gameId;
+        console.log(`King of the Hill: Focus Gained. activeGame set to: ${window.activeGame}`);
+    });
+    container.addEventListener('blur', () => {
+        window.activeGame = null;
+        console.log(`King of the Hill: Focus Lost. activeGame set to: ${window.activeGame}`);
+    });
 
     // ===================================
     // RENDERER & SCENE SETUP
@@ -39,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // PHYSICS (CANNON.js) SETUP
     // ===================================
     const world = new CANNON.World();
-    world.gravity.set(0, -30, 0); // A bit stronger gravity
+    world.gravity.set(0, -30, 0);
 
     // --- Materials ---
     const groundMaterial = new CANNON.Material('ground');
@@ -49,8 +65,8 @@ document.addEventListener('DOMContentLoaded', () => {
         restitution: 0.1,
     }));
     world.addContactMaterial(new CANNON.ContactMaterial(playerMaterial, playerMaterial, {
-        friction: 0.0,
-        restitution: 0.5, // Make players bounce off each other slightly
+        friction: 0.1,
+        restitution: 0.5,
     }));
 
 
@@ -84,14 +100,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const player1Material = new THREE.MeshStandardMaterial({ color: 0x00aaff });
     const player1Mesh = new THREE.Mesh(playerGeometry, player1Material);
     scene.add(player1Mesh);
-    const player1Body = new CANNON.Body({ mass: 70, shape: playerShape, material: playerMaterial, position: new CANNON.Vec3(5, 0.5, 0) });
+    const player1Body = new CANNON.Body({ mass: 70, shape: playerShape, material: playerMaterial, position: new CANNON.Vec3(5, 0.5, 0), linearDamping: 0.9 });
     world.addBody(player1Body);
 
     // Player 2 (Red)
     const player2Material = new THREE.MeshStandardMaterial({ color: 0xff4444 });
     const player2Mesh = new THREE.Mesh(playerGeometry, player2Material);
     scene.add(player2Mesh);
-    const player2Body = new CANNON.Body({ mass: 70, shape: playerShape, material: playerMaterial, position: new CANNON.Vec3(-5, 0.5, 0) });
+    const player2Body = new CANNON.Body({ mass: 70, shape: playerShape, material: playerMaterial, position: new CANNON.Vec3(-5, 0.5, 0), linearDamping: 0.9 });
     world.addBody(player2Body);
 
 
@@ -102,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const player1KeyPresses = [];
     const player2KeyPresses = [];
     const keyPressTimeWindow = 500; // ms
-    const pushForce = 80;
+    const pushImpulse = 40;
 
     document.addEventListener('keydown', (e) => {
         if (gameOver || window.activeGame !== gameId) return;
@@ -121,19 +137,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function handleMovement() {
-        const moveForce = 40;
-
-        // Player 1 (Arrows)
-        if (keys['ArrowUp']) player1Body.applyForce(new CANNON.Vec3(0, 0, -moveForce), player1Body.position);
-        if (keys['ArrowDown']) player1Body.applyForce(new CANNON.Vec3(0, 0, moveForce), player1Body.position);
-        if (keys['ArrowLeft']) player1Body.applyForce(new CANNON.Vec3(-moveForce, 0, 0), player1Body.position);
-        if (keys['ArrowRight']) player1Body.applyForce(new CANNON.Vec3(moveForce, 0, 0), player1Body.position);
-
-        // Player 2 (WASD)
-        if (keys['KeyW']) player2Body.applyForce(new CANNON.Vec3(0, 0, -moveForce), player2Body.position);
-        if (keys['KeyS']) player2Body.applyForce(new CANNON.Vec3(0, 0, moveForce), player2Body.position);
-        if (keys['KeyA']) player2Body.applyForce(new CANNON.Vec3(-moveForce, 0, 0), player2Body.position);
-        if (keys['KeyD']) player2Body.applyForce(new CANNON.Vec3(moveForce, 0, 0), player2Body.position);
+        const moveSpeed = 5;
+        
+        // Player 1 (Arrows) - Set velocity directly
+        const p1_vel = new CANNON.Vec3(0, player1Body.velocity.y, 0);
+        if (keys['ArrowUp']) p1_vel.z = -moveSpeed;
+        else if (keys['ArrowDown']) p1_vel.z = moveSpeed;
+        if (keys['ArrowLeft']) p1_vel.x = -moveSpeed;
+        else if (keys['ArrowRight']) p1_vel.x = moveSpeed;
+        player1Body.velocity.x = p1_vel.x;
+        player1Body.velocity.z = p1_vel.z;
+        
+        // Player 2 (WASD) - Set velocity directly
+        const p2_vel = new CANNON.Vec3(0, player2Body.velocity.y, 0);
+        if (keys['KeyW']) p2_vel.z = -moveSpeed;
+        else if (keys['KeyS']) p2_vel.z = moveSpeed;
+        if (keys['KeyA']) p2_vel.x = -moveSpeed;
+        else if (keys['KeyD']) p2_vel.x = moveSpeed;
+        player2Body.velocity.x = p2_vel.x;
+        player2Body.velocity.z = p2_vel.z;
     }
     
     // Collision handler for pushing
@@ -144,12 +166,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const p1power = player1KeyPresses.filter(t => now - t < keyPressTimeWindow).length;
             const p2power = player2KeyPresses.filter(t => now - t < keyPressTimeWindow).length;
 
+            if (p1power === p2power) return;
+
             const direction = player2Body.position.vsub(player1Body.position).unit();
 
             if (p1power > p2power) {
-                player2Body.applyImpulse(direction.scale(pushForce), player2Body.position);
-            } else if (p2power > p1power) {
-                player1Body.applyImpulse(direction.scale(-pushForce), player1Body.position);
+                player2Body.applyImpulse(direction.scale(pushImpulse), player2Body.position);
+            } else {
+                player1Body.applyImpulse(direction.scale(-pushImpulse), player1Body.position);
             }
         }
     });
@@ -174,8 +198,8 @@ document.addEventListener('DOMContentLoaded', () => {
             hill.material = player2CapturedMaterial;
             gameOver = true;
             if(redWinScreen) redWinScreen.style.display = 'flex';
-        } else {
-            hill.material = neutralMaterial; // Contested or empty
+        } else if (p1OnHill && p2OnHill){
+             hill.material = neutralMaterial; // Contested
         }
     }
 
