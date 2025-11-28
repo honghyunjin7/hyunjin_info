@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Greenhouse boundaries
     const fieldWidth = 30; // X-axis
-    const fieldLength = 50; // Z-axis, extends beyond goals
+    const fieldLength = 45; // Z-axis, extends beyond goals
     const fieldHeight = 15; // Y-axis
 
     const wallMaterial = new THREE.MeshStandardMaterial({ color: 0xcccccc, transparent: true, opacity: 0.1 });
