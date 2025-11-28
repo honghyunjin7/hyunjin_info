@@ -1,8 +1,11 @@
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Scene setup
+    const gameId = 'king-of-the-hill';
     const container = document.getElementById('king-of-the-hill-container');
     if (!container) return;
+
+    container.addEventListener('mouseover', () => window.activeGame = gameId);
+    container.addEventListener('mouseout', () => window.activeGame = null);
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x222222);
@@ -51,8 +54,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Player Movement
     const keys = {};
-    document.addEventListener('keydown', (e) => keys[e.code] = true);
-    document.addEventListener('keyup', (e) => keys[e.code] = false);
+    document.addEventListener('keydown', (e) => {
+        if (window.activeGame !== gameId) return;
+        keys[e.code] = true;
+    });
+    document.addEventListener('keyup', (e) => {
+        keys[e.code] = false;
+    });
 
     const playerSpeed = 0.1;
 
@@ -93,8 +101,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Animation loop
     function animate() {
         requestAnimationFrame(animate);
-        updatePlayersPosition();
-        checkHillCapture();
+        if (window.activeGame === gameId) {
+            updatePlayersPosition();
+            checkHillCapture();
+        }
         renderer.render(scene, camera);
     }
 

@@ -1,7 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Scene setup
+    const gameId = 'space-ball';
     const container = document.getElementById('space-ball-container');
     if (!container) return;
+
+    container.addEventListener('mouseover', () => window.activeGame = gameId);
+    container.addEventListener('mouseout', () => window.activeGame = null);
 
     // Three.js Scene
     const scene = new THREE.Scene();
@@ -74,8 +77,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Controls
     const keys = {};
-    document.addEventListener('keydown', (e) => keys[e.code] = true, false);
-    document.addEventListener('keyup', (e) => keys[e.code] = false, false);
+    document.addEventListener('keydown', (e) => {
+        if (window.activeGame !== gameId) return;
+        keys[e.code] = true;
+    }, false);
+    document.addEventListener('keyup', (e) => {
+        keys[e.code] = false;
+    }, false);
 
     function handleControls() {
         const moveSpeed = 10;
@@ -114,7 +122,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const deltaTime = clock.getDelta();
         world.step(1/60, deltaTime, 3);
 
-        handleControls();
+        if (window.activeGame === gameId) {
+            handleControls();
+        }
 
         // Update meshes
         player1Mesh.position.copy(player1Body.position);

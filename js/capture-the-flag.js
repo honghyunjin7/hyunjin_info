@@ -1,7 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Scene setup
+    const gameId = 'capture-the-flag';
     const container = document.getElementById('capture-the-flag-container');
     if (!container) return;
+
+    container.addEventListener('mouseover', () => window.activeGame = gameId);
+    container.addEventListener('mouseout', () => window.activeGame = null);
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x222222);
@@ -70,6 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const pickupDistance = 1.5;
 
     document.addEventListener('keydown', (e) => {
+        if (window.activeGame !== gameId) return;
         keys[e.code] = true;
 
         // Player 1 (Right Shift) for Red Flag
@@ -110,6 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.addEventListener('keyup', (e) => {
+        // We update the key status regardless of active game
         keys[e.code] = false;
     });
 
@@ -138,7 +143,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Animation loop
     function animate() {
         requestAnimationFrame(animate);
-        updatePlayersPosition();
+        if (window.activeGame === gameId) {
+            updatePlayersPosition();
+        }
         renderer.render(scene, camera);
     }
 
