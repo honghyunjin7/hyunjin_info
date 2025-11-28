@@ -104,14 +104,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const player1Material = new THREE.MeshStandardMaterial({ color: 0x00aaff });
     const player1Mesh = new THREE.Mesh(playerGeometry, player1Material);
     scene.add(player1Mesh);
-    const player1Body = new CANNON.Body({ mass: 70, shape: playerShape, material: playerMaterial, position: new CANNON.Vec3(5, 0.5, 0), linearDamping: 0.9 });
+    const player1Body = new CANNON.Body({ mass: 70, shape: playerShape, material: playerMaterial, position: new CANNON.Vec3(2, 0.5, 0), linearDamping: 0.9 });
     world.addBody(player1Body);
 
     // Player 2 (Red)
     const player2Material = new THREE.MeshStandardMaterial({ color: 0xff4444 });
     const player2Mesh = new THREE.Mesh(playerGeometry, player2Material);
     scene.add(player2Mesh);
-    const player2Body = new CANNON.Body({ mass: 70, shape: playerShape, material: playerMaterial, position: new CANNON.Vec3(-5, 0.5, 0), linearDamping: 0.9 });
+    const player2Body = new CANNON.Body({ mass: 70, shape: playerShape, material: playerMaterial, position: new CANNON.Vec3(-2, 0.5, 0), linearDamping: 0.9 });
     world.addBody(player2Body);
 
 
