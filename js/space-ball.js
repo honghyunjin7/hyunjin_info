@@ -11,6 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const scoreDisplayP1 = document.getElementById('space-ball-score-p1');
     const scoreDisplayP2 = document.getElementById('space-ball-score-p2');
+    const timerDisplay = document.getElementById('space-ball-timer');
+
+    const gameDuration = 3 * 60; // 3 minutes in seconds
+    let remainingTime = gameDuration;
+    let timerInterval;
 
     // Three.js Scene
     const scene = new THREE.Scene();
@@ -130,14 +135,47 @@ document.addEventListener('DOMContentLoaded', () => {
     const ballBody = new CANNON.Body({ mass: 1, position: new CANNON.Vec3(0, 5, 0), shape: new CANNON.Sphere(1), material: ballMat });
     world.addBody(ballBody);
 
+    function updateTimerDisplay() {
+        const minutes = Math.floor(remainingTime / 60);
+        const seconds = remainingTime % 60;
+        if (timerDisplay) {
+            timerDisplay.textContent = `남은 시간: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+    }
+
+    function gameOver() {
+        clearInterval(timerInterval);
+        console.log('Game Over!');
+        if (scorePlayer1 > scorePlayer2) {
+            console.log('Player 1 Wins!');
+        } else if (scorePlayer2 > scorePlayer1) {
+            console.log('Player 2 Wins!');
+        } else {
+            console.log('It\'s a Draw!');
+        }
+        // Optionally display a game over message on screen
+    }
+
+    function startGameTimer() {
+        timerInterval = setInterval(() => {
+            remainingTime--;
+            updateTimerDisplay();
+            if (remainingTime <= 0) {
+                gameOver();
+            }
+        }, 1000);
+    }
+
     function resetBall() {
         ballBody.position.set(0, 5, 0);
         ballBody.velocity.set(0, 0, 0);
         ballBody.angularVelocity.set(0, 0, 0);
         if (scoreDisplayP1) scoreDisplayP1.textContent = `블루 팀: ${scorePlayer1}`;
         if (scoreDisplayP2) scoreDisplayP2.textContent = `레드 팀: ${scorePlayer2}`;
+        updateTimerDisplay(); // Update timer display on ball reset
     }
-    resetBall(); // Initialize score display
+    resetBall(); // Initialize score display and timer display
+    startGameTimer(); // Start the game timer
 
     ballBody.addEventListener('collide', function(e) {
         if (e.body === goal1Body) {
@@ -271,19 +309,22 @@ document.addEventListener('DOMContentLoaded', () => {
         requestAnimationFrame(animate);
         
         const deltaTime = clock.getDelta();
-        world.step(1/60, deltaTime, 3);
 
-        if (window.activeGame === gameId) {
-            handleControls();
+        if (remainingTime > 0) { // Only update physics and controls if game is ongoing
+            world.step(1/60, deltaTime, 3);
+
+            if (window.activeGame === gameId) {
+                handleControls();
+            }
+
+            // Update meshes
+            player1Mesh.position.copy(player1Body.position);
+            player1Mesh.quaternion.copy(player1Body.quaternion);
+            player2Mesh.position.copy(player2Body.position);
+            player2Mesh.quaternion.copy(player2Body.quaternion);
+            ballMesh.position.copy(ballBody.position);
+            ballMesh.quaternion.copy(ballBody.quaternion);
         }
-
-        // Update meshes
-        player1Mesh.position.copy(player1Body.position);
-        player1Mesh.quaternion.copy(player1Body.quaternion);
-        player2Mesh.position.copy(player2Body.position);
-        player2Mesh.quaternion.copy(player2Body.quaternion);
-        ballMesh.position.copy(ballBody.position);
-        ballMesh.quaternion.copy(ballBody.quaternion);
 
         renderer.render(scene, camera);
     }
