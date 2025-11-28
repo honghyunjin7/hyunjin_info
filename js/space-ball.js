@@ -43,14 +43,14 @@ document.addEventListener('DOMContentLoaded', () => {
     scene.add(groundMesh);
 
     // Player 1 (Blue)
-    const player1Body = new CANNON.Body({ mass: 10, position: new CANNON.Vec3(5, 1, 15), shape: new CANNON.Box(new CANNON.Vec3(1, 0.5, 2)), material: player1Mat });
+    const player1Body = new CANNON.Body({ mass: 10, position: new CANNON.Vec3(-5, 1, -15), shape: new CANNON.Box(new CANNON.Vec3(1, 0.5, 2)), material: player1Mat });
     world.addBody(player1Body);
     const player1Mesh = new THREE.Mesh(new THREE.BoxGeometry(2, 1, 4), new THREE.MeshStandardMaterial({ color: 0x00aaff }));
     player1Mesh.castShadow = true;
     scene.add(player1Mesh);
 
     // Player 2 (Red)
-    const player2Body = new CANNON.Body({ mass: 10, position: new CANNON.Vec3(-5, 1, -15), shape: new CANNON.Box(new CANNON.Vec3(1, 0.5, 2)), material: player2Mat });
+    const player2Body = new CANNON.Body({ mass: 10, position: new CANNON.Vec3(5, 1, 15), shape: new CANNON.Box(new CANNON.Vec3(1, 0.5, 2)), material: player2Mat });
     world.addBody(player2Body);
     const player2Mesh = new THREE.Mesh(new THREE.BoxGeometry(2, 1, 4), new THREE.MeshStandardMaterial({ color: 0xff4444 }));
     player2Mesh.castShadow = true;
