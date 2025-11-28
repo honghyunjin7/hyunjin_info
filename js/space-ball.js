@@ -131,6 +131,20 @@ document.addEventListener('DOMContentLoaded', () => {
     player2Mesh.castShadow = true;
     scene.add(player2Mesh);
 
+    // AI Player 3 (Blue Team - AI)
+    const player3Body = new CANNON.Body({ mass: 10, position: new CANNON.Vec3(-5, 1, -10), shape: new CANNON.Box(new CANNON.Vec3(1, 0.5, 2)), material: player1Mat }); // Using player1Mat for consistency
+    world.addBody(player3Body);
+    const player3Mesh = new THREE.Mesh(new THREE.BoxGeometry(2, 1, 4), new THREE.MeshStandardMaterial({ color: 0x00aaff })); // Blue color
+    player3Mesh.castShadow = true;
+    scene.add(player3Mesh);
+
+    // AI Player 4 (Red Team - AI)
+    const player4Body = new CANNON.Body({ mass: 10, position: new CANNON.Vec3(5, 1, 10), shape: new CANNON.Box(new CANNON.Vec3(1, 0.5, 2)), material: player2Mat }); // Using player2Mat for consistency
+    world.addBody(player4Body);
+    const player4Mesh = new THREE.Mesh(new THREE.BoxGeometry(2, 1, 4), new THREE.MeshStandardMaterial({ color: 0xff4444 })); // Red color
+    player4Mesh.castShadow = true;
+    scene.add(player4Mesh);
+
     // Ball
     const ballBody = new CANNON.Body({ mass: 1, position: new CANNON.Vec3(0, 5, 0), shape: new CANNON.Sphere(1), material: ballMat });
     world.addBody(ballBody);
@@ -234,6 +248,8 @@ document.addEventListener('DOMContentLoaded', () => {
     world.addContactMaterial(new CANNON.ContactMaterial(player1Mat, ballMat, { friction: 0.1, restitution: 0.9 }));
     world.addContactMaterial(new CANNON.ContactMaterial(player2Mat, ballMat, { friction: 0.1, restitution: 0.9 }));
     world.addContactMaterial(new CANNON.ContactMaterial(player1Mat, player2Mat, { friction: 0.0, restitution: 1.0 }));
+    world.addContactMaterial(new CANNON.ContactMaterial(player1Mat, physicsWallMaterial, { friction: 0.1, restitution: 0.1 })); // Player-wall
+    world.addContactMaterial(new CANNON.ContactMaterial(player2Mat, physicsWallMaterial, { friction: 0.1, restitution: 0.1 })); // Player-wall
     world.addContactMaterial(new CANNON.ContactMaterial(ballMat, physicsWallMaterial, { friction: 0.4, restitution: 0.8 })); // Ball-wall interaction
 
 
@@ -304,6 +320,48 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // Animation loop
+    function handleAILogic(playerBody, playerMesh, team, opponentGoalZ) {
+        const aiMoveSpeed = 0.5; // Adjusted for applyForce
+        const aiKickStrength = 60; // Slightly stronger kick for AI
+        const aiKickRange = kickRange + 0.5; // Slightly larger kick range for AI
+
+        // Determine target for movement (ball)
+        const toBall = new CANNON.Vec3();
+        ballBody.position.vsub(playerBody.position, toBall);
+        toBall.y = 0; // Keep movement on the ground plane
+
+        // Apply force to move towards the ball
+        if (toBall.length() > 0.5) { // Only move if not too close
+            toBall.normalize();
+            playerBody.applyForce(toBall.scale(playerBody.mass * aiMoveSpeed), playerBody.position);
+        }
+
+        // Kick logic
+        const kickDirection = new CANNON.Vec3();
+        ballBody.position.vsub(playerBody.position, kickDirection); // Vector from AI to Ball
+        const distanceToBall = kickDirection.length();
+
+        if (distanceToBall < aiKickRange) {
+            // Calculate direction to opponent's goal
+            const opponentGoalPosition = new CANNON.Vec3(0, 0, opponentGoalZ);
+            const ballToGoal = new CANNON.Vec3();
+            opponentGoalPosition.vsub(ballBody.position, ballToGoal);
+            ballToGoal.y = 0; // Keep on ground plane
+
+            // If the AI is roughly between the ball and the opponent's goal, kick
+            // This is a very simple check, can be improved
+            // Check if player's 'forward' direction is roughly towards the ball, and ball's direction is roughly towards goal
+            // const playerForward = new CANNON.Vec3(0, 0, (team === 'blue' ? -1 : 1)); // Simplified forward for AI
+
+            // A more robust check: does kicking the ball in current kickDirection lead towards the goal?
+            kickDirection.normalize();
+            ballToGoal.normalize();
+            if (kickDirection.dot(ballToGoal) > 0.5) { // If kick direction is somewhat aligned with goal direction
+                 ballBody.applyImpulse(kickDirection.scale(aiKickStrength), ballBody.position);
+            }
+        }
+    }
+
     const clock = new THREE.Clock();
     function animate() {
         requestAnimationFrame(animate);
@@ -315,6 +373,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (window.activeGame === gameId) {
                 handleControls();
+                // Handle AI logic for Player 3 (Blue) and Player 4 (Red)
+                // Player 3 (Blue) attacks Player 2's goal (z = 20)
+                handleAILogic(player3Body, player3Mesh, 'blue', 20); 
+                // Player 4 (Red) attacks Player 1's goal (z = -20)
+                handleAILogic(player4Body, player4Mesh, 'red', -20); 
             }
 
             // Update meshes
@@ -322,6 +385,10 @@ document.addEventListener('DOMContentLoaded', () => {
             player1Mesh.quaternion.copy(player1Body.quaternion);
             player2Mesh.position.copy(player2Body.position);
             player2Mesh.quaternion.copy(player2Body.quaternion);
+            player3Mesh.position.copy(player3Body.position); // Update AI Player 3 mesh
+            player3Mesh.quaternion.copy(player3Body.quaternion);
+            player4Mesh.position.copy(player4Body.position); // Update AI Player 4 mesh
+            player4Mesh.quaternion.copy(player4Body.quaternion);
             ballMesh.position.copy(ballBody.position);
             ballMesh.quaternion.copy(ballBody.quaternion);
         }
