@@ -147,18 +147,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function checkWinConditions() {
-        // Blue player wins
-        const blueBaseBounds = new THREE.Box3().setFromObject(blueBase);
-        if (redFlag.parent === player1 && blueBaseBounds.containsPoint(player1.position)) {
-            gameOver = true;
-            if (blueWinScreen) blueWinScreen.style.display = 'flex';
+        // Blue player (player1) wins condition
+        if (redFlag.parent === player1) {
+            const p1x = player1.position.x;
+            const p1z = player1.position.z;
+            const blueBaseX = blueBase.position.x;
+            const blueBaseZ = blueBase.position.z;
+            // Base width and depth are 4, so radius is 2
+            if (p1x > blueBaseX - 2 && p1x < blueBaseX + 2 &&
+                p1z > blueBaseZ - 2 && p1z < blueBaseZ + 2) {
+                gameOver = true;
+                if (blueWinScreen) blueWinScreen.style.display = 'flex';
+            }
         }
 
-        // Red player wins
-        const redBaseBounds = new THREE.Box3().setFromObject(redBase);
-        if (blueFlag.parent === player2 && redBaseBounds.containsPoint(player2.position)) {
-            gameOver = true;
-            if (redWinScreen) redWinScreen.style.display = 'flex';
+        // Red player (player2) wins condition
+        if (blueFlag.parent === player2) {
+            const p2x = player2.position.x;
+            const p2z = player2.position.z;
+            const redBaseX = redBase.position.x;
+            const redBaseZ = redBase.position.z;
+            // Base width and depth are 4, so radius is 2
+            if (p2x > redBaseX - 2 && p2x < redBaseX + 2 &&
+                p2z > redBaseZ - 2 && p2z < redBaseZ + 2) {
+                gameOver = true;
+                if (redWinScreen) redWinScreen.style.display = 'flex';
+            }
         }
     }
 
