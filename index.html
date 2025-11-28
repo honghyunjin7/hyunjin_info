@@ -306,7 +306,14 @@
                   <h4>3D 깃발 뺏기 (Capture the Flag)</h4>
                   <p>두 팀으로 나뉘어 상대 팀의 깃발을 훔쳐오는 게임입니다. 키보드 화살표 키로 파란색 플레이어를 움직여보세요.</p>
                 </div>
-                <div id="capture-the-flag-container" style="width: 100%; height: 400px; background: #000;"></div>
+                <div id="capture-the-flag-container" style="width: 100%; height: 400px; background: #000; position: relative;">
+                  <div id="blue-win-screen" class="win-screen" style="display: none;">
+                    <div class="win-message">블루 승리!</div>
+                  </div>
+                  <div id="red-win-screen" class="win-screen" style="display: none;">
+                    <div class="win-message">레드 승리!</div>
+                  </div>
+                </div>
               </div>
             </div>
 

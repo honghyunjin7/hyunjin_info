@@ -226,3 +226,32 @@
     transform: scale(1.05);
     box-shadow: 0 0 15px var(--skin-color);
 }
+
+.win-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.win-message {
+    font-size: 5em;
+    color: white;
+    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #00f;
+}
+
+#blue-win-screen .win-message {
+    color: #4d94ff;
+    text-shadow: 0 0 10px #4d94ff, 0 0 20px #4d94ff, 0 0 30px #fff;
+}
+
+#red-win-screen .win-message {
+    color: #ff4d4d;
+    text-shadow: 0 0 10px #ff4d4d, 0 0 20px #ff4d4d, 0 0 30px #fff;
+}
