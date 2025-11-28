@@ -6,6 +6,12 @@ document.addEventListener('DOMContentLoaded', () => {
     container.addEventListener('mouseover', () => window.activeGame = gameId);
     container.addEventListener('mouseout', () => window.activeGame = null);
 
+    let scorePlayer1 = 0;
+    let scorePlayer2 = 0;
+
+    const scoreDisplayP1 = document.getElementById('space-ball-score-p1');
+    const scoreDisplayP2 = document.getElementById('space-ball-score-p2');
+
     // Three.js Scene
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x111111);
@@ -59,12 +65,68 @@ document.addEventListener('DOMContentLoaded', () => {
     // Ball
     const ballBody = new CANNON.Body({ mass: 1, position: new CANNON.Vec3(0, 5, 0), shape: new CANNON.Sphere(1), material: ballMat });
     world.addBody(ballBody);
+
+    function resetBall() {
+        ballBody.position.set(0, 5, 0);
+        ballBody.velocity.set(0, 0, 0);
+        ballBody.angularVelocity.set(0, 0, 0);
+        if (scoreDisplayP1) scoreDisplayP1.textContent = `블루 팀: ${scorePlayer1}`;
+        if (scoreDisplayP2) scoreDisplayP2.textContent = `레드 팀: ${scorePlayer2}`;
+    }
+    resetBall(); // Initialize score display
+
+    ballBody.addEventListener('collide', function(e) {
+        if (e.body === goal1Body) {
+            scorePlayer2++;
+            console.log('Player 2 Scored! Score: ' + scorePlayer1 + ' - ' + scorePlayer2);
+            resetBall();
+        } else if (e.body === goal2Body) {
+            scorePlayer1++;
+            console.log('Player 1 Scored! Score: ' + scorePlayer1 + ' - ' + scorePlayer2);
+            resetBall();
+        }
+    });
     const ballMesh = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 32), new THREE.MeshStandardMaterial({ color: 0xffffff }));
     ballMesh.castShadow = true;
     scene.add(ballMesh);
+
+    // Goal Materials
+    const goal1Mat = new CANNON.Material('goal1');
+        const goal2Mat = new CANNON.Material('goal2');
     
-    // Contact Materials
-    world.addContactMaterial(new CANNON.ContactMaterial(groundMat, player1Mat, { friction: 0.1, restitution: 0.1 }));
+        // Goals
+        const goalWidth = 10;
+        const goalHeight = 5;
+        const goalDepth = 1;
+        const goalZOffset = 20; // Distance behind player start position
+    
+        // Player 1 Goal (Blue)
+        const goal1Body = new CANNON.Body({ mass: 0, position: new CANNON.Vec3(0, goalHeight / 2, -goalZOffset), material: goal1Mat });
+        goal1Body.addShape(new CANNON.Box(new CANNON.Vec3(goalWidth / 2, goalHeight / 2, goalDepth / 2)));
+        goal1Body.isTrigger = true; // Make it a sensor
+        world.addBody(goal1Body);
+    
+        const goal1Mesh = new THREE.Mesh(
+            new THREE.BoxGeometry(goalWidth, goalHeight, goalDepth),
+            new THREE.MeshStandardMaterial({ color: 0x00aaff, transparent: true, opacity: 0.3 })
+        );
+        goal1Mesh.position.copy(goal1Body.position);
+        scene.add(goal1Mesh);
+    
+        // Player 2 Goal (Red)
+        const goal2Body = new CANNON.Body({ mass: 0, position: new CANNON.Vec3(0, goalHeight / 2, goalZOffset), material: goal2Mat });
+        goal2Body.addShape(new CANNON.Box(new CANNON.Vec3(goalWidth / 2, goalHeight / 2, goalDepth / 2)));
+        goal2Body.isTrigger = true; // Make it a sensor
+        world.addBody(goal2Body);
+    
+        const goal2Mesh = new THREE.Mesh(
+            new THREE.BoxGeometry(goalWidth, goalHeight, goalDepth),
+            new THREE.MeshStandardMaterial({ color: 0xff4444, transparent: true, opacity: 0.3 })
+        );
+        goal2Mesh.position.copy(goal2Body.position);
+        scene.add(goal2Mesh);
+        
+        // Contact Materials    world.addContactMaterial(new CANNON.ContactMaterial(groundMat, player1Mat, { friction: 0.1, restitution: 0.1 }));
     world.addContactMaterial(new CANNON.ContactMaterial(groundMat, player2Mat, { friction: 0.1, restitution: 0.1 }));
     world.addContactMaterial(new CANNON.ContactMaterial(groundMat, ballMat, { friction: 0.4, restitution: 0.6 }));
     world.addContactMaterial(new CANNON.ContactMaterial(player1Mat, ballMat, { friction: 0.1, restitution: 0.9 }));
