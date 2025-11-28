@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function handleMovement() {
-        const moveSpeed = 5;
+        const moveSpeed = 6; // Increased by 1.2 times (5 * 1.2)
         
         // Player 1 (Arrows) - Set velocity directly
         const p1_vel = new CANNON.Vec3(0, player1Body.velocity.y, 0);
