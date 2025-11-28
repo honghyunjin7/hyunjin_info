@@ -43,8 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Flags
     const flagGeometry = new THREE.CylinderGeometry(0.2, 0.2, 2, 8);
-    const blueFlagMaterial = new THREE.MeshStandardMaterial({ color: 0x0000ff, emissive: 0x0000cc });
-    const redFlagMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000, emissive: 0xcc0000 });
+    const blueFlagMaterial = new THREE.MeshStandardMaterial({ color: 0x000000, emissive: 0x000000 });
+    const redFlagMaterial = new THREE.MeshStandardMaterial({ color: 0x000000, emissive: 0x000000 });
     const blueFlag = new THREE.Mesh(flagGeometry, blueFlagMaterial);
     blueFlag.position.set(12, 1, 0);
     scene.add(blueFlag);
