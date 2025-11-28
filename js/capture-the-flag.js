@@ -76,8 +76,8 @@ document.addEventListener('DOMContentLoaded', () => {
         keys[e.code] = true; // Always update key state
         if (window.activeGame !== gameId) return; // Guard game-specific logic
 
-        // Player 1 (Right Shift) for Red Flag
-        if (e.code === 'ShiftRight') {
+        // Player 1 (Slash key) for Red Flag
+        if (e.code === 'Slash') {
             if (redFlag.parent === player1) {
                 // Drop the flag
                 player1.remove(redFlag);
