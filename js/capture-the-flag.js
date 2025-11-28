@@ -35,10 +35,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const blueBaseMaterial = new THREE.MeshStandardMaterial({ color: 0x0000ff });
     const redBaseMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
     const blueBase = new THREE.Mesh(baseGeometry, blueBaseMaterial);
-    blueBase.position.set(-12, 0.1, 0);
+    blueBase.position.set(12, 0.1, 0);
     scene.add(blueBase);
     const redBase = new THREE.Mesh(baseGeometry, redBaseMaterial);
-    redBase.position.set(12, 0.1, 0);
+    redBase.position.set(-12, 0.1, 0);
     scene.add(redBase);
 
     // Flags
@@ -46,10 +46,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const blueFlagMaterial = new THREE.MeshStandardMaterial({ color: 0x0000ff, emissive: 0x0000cc });
     const redFlagMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000, emissive: 0xcc0000 });
     const blueFlag = new THREE.Mesh(flagGeometry, blueFlagMaterial);
-    blueFlag.position.set(-12, 1, 0);
+    blueFlag.position.set(12, 1, 0);
     scene.add(blueFlag);
     const redFlag = new THREE.Mesh(flagGeometry, redFlagMaterial);
-    redFlag.position.set(12, 1, 0);
+    redFlag.position.set(-12, 1, 0);
     scene.add(redFlag);
 
     blueFlag.originalPosition = blueFlag.position.clone();
