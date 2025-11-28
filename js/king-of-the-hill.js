@@ -183,23 +183,34 @@ document.addEventListener('DOMContentLoaded', () => {
     // GAME LOGIC & WIN CONDITION
     // ===================================
     function checkWinCondition() {
-        // Use XZ distance for hill check, ignoring Y
+        const hillRadius = 4;
         const p1Dist = Math.sqrt(Math.pow(player1Body.position.x - hill.position.x, 2) + Math.pow(player1Body.position.z - hill.position.z, 2));
         const p2Dist = Math.sqrt(Math.pow(player2Body.position.x - hill.position.x, 2) + Math.pow(player2Body.position.z - hill.position.z, 2));
         
-        const p1OnHill = p1Dist < 4;
-        const p2OnHill = p2Dist < 4;
+        const p1OnHill = p1Dist < hillRadius;
+        const p2OnHill = p2Dist < hillRadius;
+
+        if (gameOver) {
+            return; // Game is already over, do nothing
+        }
 
         if (p1OnHill && !p2OnHill) {
+            // Player 1 wins: P1 is on hill, P2 is off hill
             hill.material = player1CapturedMaterial;
             gameOver = true;
-            if(blueWinScreen) blueWinScreen.style.display = 'flex';
+            if (blueWinScreen) blueWinScreen.style.display = 'flex';
         } else if (!p1OnHill && p2OnHill) {
+            // Player 2 wins: P2 is on hill, P1 is off hill
             hill.material = player2CapturedMaterial;
             gameOver = true;
-            if(redWinScreen) redWinScreen.style.display = 'flex';
-        } else if (p1OnHill && p2OnHill){
-             hill.material = neutralMaterial; // Contested
+            if (redWinScreen) redWinScreen.style.display = 'flex';
+        } else if (p1OnHill && p2OnHill) {
+            // Contested: Both are on the hill
+            hill.material = neutralMaterial;
+            // Game does not end, gameOver remains false
+        } else {
+            // Nobody on the hill or other states (e.g., both off)
+            hill.material = neutralMaterial;
         }
     }
 
