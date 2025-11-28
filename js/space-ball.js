@@ -48,6 +48,70 @@ document.addEventListener('DOMContentLoaded', () => {
     groundMesh.receiveShadow = true;
     scene.add(groundMesh);
 
+    // Greenhouse boundaries
+    const fieldWidth = 30; // X-axis
+    const fieldLength = 50; // Z-axis, extends beyond goals
+    const fieldHeight = 15; // Y-axis
+
+    const wallMaterial = new THREE.MeshStandardMaterial({ color: 0xcccccc, transparent: true, opacity: 0.1 });
+    const physicsWallMaterial = new CANNON.Material('wall');
+
+    // Ceiling
+    const ceilingShape = new CANNON.Plane();
+    const ceilingBody = new CANNON.Body({ mass: 0, material: physicsWallMaterial });
+    ceilingBody.addShape(ceilingShape);
+    ceilingBody.position.set(0, fieldHeight, 0);
+    ceilingBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), Math.PI / 2); // Rotate to face downwards
+    world.addBody(ceilingBody);
+
+    const ceilingMesh = new THREE.Mesh(new THREE.PlaneGeometry(fieldWidth, fieldLength), wallMaterial);
+    ceilingMesh.position.set(0, fieldHeight, 0);
+    ceilingMesh.rotation.x = Math.PI / 2;
+    scene.add(ceilingMesh);
+
+    // Walls
+    const wallThickness = 0.5;
+
+    // Wall Left (Negative X)
+    const wallLeftShape = new CANNON.Box(new CANNON.Vec3(wallThickness / 2, fieldHeight / 2, fieldLength / 2));
+    const wallLeftBody = new CANNON.Body({ mass: 0, material: physicsWallMaterial, position: new CANNON.Vec3(-fieldWidth / 2, fieldHeight / 2, 0) });
+    wallLeftBody.addShape(wallLeftShape);
+    world.addBody(wallLeftBody);
+
+    const wallLeftMesh = new THREE.Mesh(new THREE.BoxGeometry(wallThickness, fieldHeight, fieldLength), wallMaterial);
+    wallLeftMesh.position.copy(wallLeftBody.position);
+    scene.add(wallLeftMesh);
+
+    // Wall Right (Positive X)
+    const wallRightShape = new CANNON.Box(new CANNON.Vec3(wallThickness / 2, fieldHeight / 2, fieldLength / 2));
+    const wallRightBody = new CANNON.Body({ mass: 0, material: physicsWallMaterial, position: new CANNON.Vec3(fieldWidth / 2, fieldHeight / 2, 0) });
+    wallRightBody.addShape(wallRightShape);
+    world.addBody(wallRightBody);
+
+    const wallRightMesh = new THREE.Mesh(new THREE.BoxGeometry(wallThickness, fieldHeight, fieldLength), wallMaterial);
+    wallRightMesh.position.copy(wallRightBody.position);
+    scene.add(wallRightMesh);
+
+    // Wall Front (Negative Z)
+    const wallFrontShape = new CANNON.Box(new CANNON.Vec3(fieldWidth / 2, fieldHeight / 2, wallThickness / 2));
+    const wallFrontBody = new CANNON.Body({ mass: 0, material: physicsWallMaterial, position: new CANNON.Vec3(0, fieldHeight / 2, -fieldLength / 2) });
+    wallFrontBody.addShape(wallFrontShape);
+    world.addBody(wallFrontBody);
+
+    const wallFrontMesh = new THREE.Mesh(new THREE.BoxGeometry(fieldWidth, fieldHeight, wallThickness), wallMaterial);
+    wallFrontMesh.position.copy(wallFrontBody.position);
+    scene.add(wallFrontMesh);
+
+    // Wall Back (Positive Z)
+    const wallBackShape = new CANNON.Box(new CANNON.Vec3(fieldWidth / 2, fieldHeight / 2, wallThickness / 2));
+    const wallBackBody = new CANNON.Body({ mass: 0, material: physicsWallMaterial, position: new CANNON.Vec3(0, fieldHeight / 2, fieldLength / 2) });
+    wallBackBody.addShape(wallBackShape);
+    world.addBody(wallBackBody);
+
+    const wallBackMesh = new THREE.Mesh(new THREE.BoxGeometry(fieldWidth, fieldHeight, wallThickness), wallMaterial);
+    wallBackMesh.position.copy(wallBackBody.position);
+    scene.add(wallBackMesh);
+
     // Player 1 (Blue)
     const player1Body = new CANNON.Body({ mass: 10, position: new CANNON.Vec3(-5, 1, -15), shape: new CANNON.Box(new CANNON.Vec3(1, 0.5, 2)), material: player1Mat });
     world.addBody(player1Body);
@@ -132,6 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
     world.addContactMaterial(new CANNON.ContactMaterial(player1Mat, ballMat, { friction: 0.1, restitution: 0.9 }));
     world.addContactMaterial(new CANNON.ContactMaterial(player2Mat, ballMat, { friction: 0.1, restitution: 0.9 }));
     world.addContactMaterial(new CANNON.ContactMaterial(player1Mat, player2Mat, { friction: 0.0, restitution: 1.0 }));
+    world.addContactMaterial(new CANNON.ContactMaterial(ballMat, physicsWallMaterial, { friction: 0.4, restitution: 0.8 })); // Ball-wall interaction
 
 
     camera.position.set(0, 25, 28);
