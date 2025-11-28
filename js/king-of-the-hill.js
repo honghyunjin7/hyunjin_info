@@ -9,10 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Game State
     let gameOver = false;
-    // New variables for capture duration
-    let player1CaptureTime = 0;
-    let player2CaptureTime = 0;
-    const captureDuration = 3; // seconds
     let player1IsGrounded = false; // Grounded state for jump
     let player2IsGrounded = false; // Grounded state for jump
     const jumpForce = 15; // Force applied for jump
@@ -211,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ===================================
     // GAME LOGIC & WIN CONDITION
     // ===================================
-    function checkWinCondition(deltaTime) {
+    function checkWinCondition() { // Removed deltaTime from signature
         const hillRadius = 4;
         const p1Dist = Math.sqrt(Math.pow(player1Body.position.x - hill.position.x, 2) + Math.pow(player1Body.position.z - hill.position.z, 2));
         const p2Dist = Math.sqrt(Math.pow(player2Body.position.x - hill.position.x, 2) + Math.pow(player2Body.position.z - hill.position.z, 2));
@@ -224,32 +220,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (p1OnHill && !p2OnHill) {
-            // Player 1 is on hill, Player 2 is off hill
-            player1CaptureTime += deltaTime;
-            player2CaptureTime = 0;
+            // Player 1 wins: P1 is on hill, P2 is off hill
             hill.material = player1CapturedMaterial;
-            if (player1CaptureTime >= captureDuration) {
-                gameOver = true;
-                if (blueWinScreen) blueWinScreen.style.display = 'flex';
-            }
+            gameOver = true;
+            if (blueWinScreen) blueWinScreen.style.display = 'flex';
         } else if (!p1OnHill && p2OnHill) {
-            // Player 2 is on hill, Player 1 is off hill
-            player2CaptureTime += deltaTime;
-            player1CaptureTime = 0;
+            // Player 2 wins: P2 is on hill, P1 is off hill
             hill.material = player2CapturedMaterial;
-            if (player2CaptureTime >= captureDuration) {
-                gameOver = true;
-                if (redWinScreen) redWinScreen.style.display = 'flex';
-            }
+            gameOver = true;
+            if (redWinScreen) redWinScreen.style.display = 'flex';
         } else if (p1OnHill && p2OnHill) {
             // Contested: Both are on the hill
-            player1CaptureTime = 0;
-            player2CaptureTime = 0;
             hill.material = neutralMaterial;
         } else {
             // Nobody on the hill or other states (e.g., both off)
-            player1CaptureTime = 0;
-            player2CaptureTime = 0;
             hill.material = neutralMaterial;
         }
     }
@@ -266,7 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!gameOver && window.activeGame === gameId) {
             handleMovement();
-            checkWinCondition(deltaTime); // Pass deltaTime here
+            checkWinCondition(); // No longer passing deltaTime
         }
 
         // Update mesh positions from physics bodies
