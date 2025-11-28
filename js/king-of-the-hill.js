@@ -181,19 +181,10 @@ document.addEventListener('DOMContentLoaded', () => {
     player1Body.addEventListener('collide', (event) => {
         if (gameOver) return;
         if (event.body === player2Body) {
-            const now = Date.now();
-            const p1power = player1KeyPresses.filter(t => now - t < keyPressTimeWindow).length;
-            const p2power = player2KeyPresses.filter(t => now - t < keyPressTimeWindow).length;
-
-            if (p1power === p2power) return;
-
+            // Apply mutual push on collision
             const direction = player2Body.position.vsub(player1Body.position).unit();
-
-            if (p1power > p2power) {
-                player2Body.applyImpulse(direction.scale(pushImpulse), player2Body.position);
-            } else {
-                player1Body.applyImpulse(direction.scale(-pushImpulse), player1Body.position);
-            }
+            player2Body.applyImpulse(direction.scale(pushImpulse), player2Body.position);
+            player1Body.applyImpulse(direction.scale(-pushImpulse), player1Body.position);
         }
         // Check if player 1 is grounded
         if (event.body === groundBody) {
