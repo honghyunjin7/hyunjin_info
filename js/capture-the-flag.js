@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const blueWinScreen = document.getElementById('blue-win-screen');
     const redWinScreen = document.getElementById('red-win-screen');
+    const countdownOverlay = document.getElementById('countdown-overlay');
+    const countdownText = document.getElementById('countdown-text');
 
     container.addEventListener('mouseover', () => window.activeGame = gameId);
     container.addEventListener('mouseout', () => window.activeGame = null);
@@ -73,13 +75,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Game State
     let gameOver = false;
+    let gameStarted = false; // New flag for game start
 
     // Player Movement & Interaction
     const keys = {};
     const pickupDistance = 1.5;
 
     document.addEventListener('keydown', (e) => {
-        if (gameOver) return; // Disable input if game is over
+        if (gameOver || !gameStarted) return; // Disable input if game is over or not started
         keys[e.code] = true; // Always update key state
         if (window.activeGame !== gameId) return; // Guard game-specific logic
 
@@ -176,10 +179,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Countdown logic
+    function startCountdown() {
+        if (countdownOverlay && countdownText) {
+            countdownOverlay.style.display = 'flex';
+            let count = 3;
+            countdownText.textContent = count;
+
+            const timer = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    countdownText.textContent = count;
+                } else if (count === 0) {
+                    countdownText.textContent = 'GO!';
+                } else {
+                    clearInterval(timer);
+                    countdownOverlay.style.display = 'none';
+                    gameStarted = true;
+                }
+            }, 1000);
+        }
+    }
+
     // Animation loop
     function animate() {
         requestAnimationFrame(animate);
-        if (!gameOver && window.activeGame === gameId) {
+        if (!gameOver && gameStarted && window.activeGame === gameId) {
             updatePlayersPosition();
             checkWinConditions();
         }
@@ -187,6 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     animate();
+    startCountdown(); // Start the countdown when the game loads
 
     // Handle window resize
     window.addEventListener('resize', () => {
