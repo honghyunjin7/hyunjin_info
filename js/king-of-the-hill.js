@@ -41,12 +41,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const playerGeometry = new THREE.BoxGeometry(1, 1, 1);
     const player1Material = new THREE.MeshStandardMaterial({ color: 0x00aaff });
     const player1 = new THREE.Mesh(playerGeometry, player1Material);
-    player1.position.set(-5, 0.5, 0);
+    player1.position.set(5, 0.5, 0);
     scene.add(player1);
 
     const player2Material = new THREE.MeshStandardMaterial({ color: 0xff4444 });
     const player2 = new THREE.Mesh(playerGeometry, player2Material);
-    player2.position.set(5, 0.5, 0);
+    player2.position.set(-5, 0.5, 0);
     scene.add(player2);
 
     camera.position.set(0, 12, 12);
