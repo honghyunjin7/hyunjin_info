@@ -202,6 +202,9 @@ document.addEventListener('DOMContentLoaded', () => {
     camera.position.set(0, 25, 28);
     camera.lookAt(0, 0, 0);
 
+    const kickStrength = 50; // How hard the ball is kicked
+    const kickRange = 2.5;   // How close the player needs to be to the ball to kick
+
     // Controls
     const keys = {};
     document.addEventListener('keydown', (e) => {
@@ -239,6 +242,27 @@ document.addEventListener('DOMContentLoaded', () => {
         player2Body.velocity.z = p2_vz;
         player2Body.velocity.x *= linearDamping;
         player2Body.velocity.z *= linearDamping;
+
+        // Kick logic
+        const p1_to_ball_vec = new CANNON.Vec3();
+        ballBody.position.vsub(player1Body.position, p1_to_ball_vec); // Vector from P1 to Ball
+        const p1_distance_to_ball = p1_to_ball_vec.length();
+
+        const p2_to_ball_vec = new CANNON.Vec3();
+        ballBody.position.vsub(player2Body.position, p2_to_ball_vec); // Vector from P2 to Ball
+        const p2_distance_to_ball = p2_to_ball_vec.length();
+
+        // Player 1 Kick (Blue Player - '/')
+        if (keys['Slash'] && p1_distance_to_ball < kickRange) {
+            p1_to_ball_vec.normalize();
+            ballBody.applyImpulse(p1_to_ball_vec.scale(kickStrength), ballBody.position);
+        }
+
+        // Player 2 Kick (Red Player - 'ShiftLeft')
+        if (keys['ShiftLeft'] && p2_distance_to_ball < kickRange) {
+            p2_to_ball_vec.normalize();
+            ballBody.applyImpulse(p2_to_ball_vec.scale(kickStrength), ballBody.position);
+        }
     }
     
     // Animation loop
