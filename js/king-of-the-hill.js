@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const player1KeyPresses = [];
     const player2KeyPresses = [];
     const keyPressTimeWindow = 500; // ms
-    const pushImpulse = 40;
+    const pushImpulse = 80; // Increased to make pushing stronger
 
     document.addEventListener('keydown', (e) => {
         if (gameOver || window.activeGame !== gameId) return;
