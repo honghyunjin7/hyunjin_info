@@ -13,6 +13,20 @@ document.addEventListener('DOMContentLoaded', () => {
             roleCycler.textContent = roles[currentRoleIndex];
         });
     }
+
+    // Prevent scrolling when arrow keys are pressed during a game
+    document.addEventListener('keydown', (event) => {
+        if (window.activeGame) { // Check if any game is active
+            switch (event.code) {
+                case 'ArrowUp':
+                case 'ArrowDown':
+                case 'ArrowLeft':
+                case 'ArrowRight':
+                    event.preventDefault();
+                    break;
+            }
+        }
+    });
 });
 
 /* ===== Aside ===== */
