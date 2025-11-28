@@ -68,11 +68,29 @@ document.addEventListener('DOMContentLoaded', () => {
     camera.position.set(0, 15, 12);
     camera.lookAt(0, 0, 0);
 
+    // Game State
+    let gameOver = false;
+
     // Player Movement & Interaction
     const keys = {};
     const pickupDistance = 1.5;
 
+    function displayVictoryMessage(team) {
+        const messageDiv = document.createElement('div');
+        messageDiv.style.position = 'absolute';
+        messageDiv.style.top = '50%';
+        messageDiv.style.left = '50%';
+        messageDiv.style.transform = 'translate(-50%, -50%)';
+        messageDiv.style.color = 'white';
+        messageDiv.style.fontSize = '48px';
+        messageDiv.style.fontWeight = 'bold';
+        messageDiv.style.textShadow = '2px 2px 4px #000000';
+        messageDiv.textContent = team === 'blue' ? '블루 승리!' : '레드 승리!';
+        container.appendChild(messageDiv);
+    }
+
     document.addEventListener('keydown', (e) => {
+        if (gameOver) return; // Disable input if game is over
         keys[e.code] = true; // Always update key state
         if (window.activeGame !== gameId) return; // Guard game-specific logic
 
@@ -139,11 +157,28 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function checkWinConditions() {
+        // Blue player wins
+        const blueBaseBounds = new THREE.Box3().setFromObject(blueBase);
+        if (redFlag.parent === player1 && blueBaseBounds.containsPoint(player1.position)) {
+            gameOver = true;
+            displayVictoryMessage('blue');
+        }
+
+        // Red player wins
+        const redBaseBounds = new THREE.Box3().setFromObject(redBase);
+        if (blueFlag.parent === player2 && redBaseBounds.containsPoint(player2.position)) {
+            gameOver = true;
+            displayVictoryMessage('red');
+        }
+    }
+
     // Animation loop
     function animate() {
         requestAnimationFrame(animate);
-        if (window.activeGame === gameId) {
+        if (!gameOver && window.activeGame === gameId) {
             updatePlayersPosition();
+            checkWinConditions();
         }
         renderer.render(scene, camera);
     }
