@@ -6,6 +6,14 @@ document.addEventListener('DOMContentLoaded', () => {
     container.addEventListener('mouseover', () => window.activeGame = gameId);
     container.addEventListener('mouseout', () => window.activeGame = null);
 
+    const blueWinScreen = document.getElementById('sb-blue-win-screen');
+    const redWinScreen = document.getElementById('sb-red-win-screen');
+    const drawScreen = document.getElementById('sb-draw-screen');
+
+    const blueRestartButton = blueWinScreen.querySelector('.restart-btn');
+    const redRestartButton = redWinScreen.querySelector('.restart-btn');
+    const drawRestartButton = drawScreen.querySelector('.restart-btn');
+
     let scorePlayer1 = 0;
     let scorePlayer2 = 0;
 
@@ -17,6 +25,54 @@ document.addEventListener('DOMContentLoaded', () => {
     let remainingTime = gameDuration;
     let timerInterval;
 
+    function gameOver() {
+        clearInterval(timerInterval);
+        if (scorePlayer1 > scorePlayer2) {
+            blueWinScreen.style.display = 'flex';
+        } else if (scorePlayer2 > scorePlayer1) {
+            redWinScreen.style.display = 'flex';
+        } else {
+            drawScreen.style.display = 'flex';
+        }
+        scoreDisplayP1.style.display = 'none';
+        scoreDisplayP2.style.display = 'none';
+        timerDisplay.style.display = 'none';
+    }
+
+    function resetGame() {
+        scorePlayer1 = 0;
+        scorePlayer2 = 0;
+        remainingTime = gameDuration;
+
+        blueWinScreen.style.display = 'none';
+        redWinScreen.style.display = 'none';
+        drawScreen.style.display = 'none';
+
+        scoreDisplayP1.style.display = 'block';
+        scoreDisplayP2.style.display = 'block';
+        timerDisplay.style.display = 'block';
+
+        player1Body.position.set(-5, 1, -15);
+        player1Body.velocity.set(0, 0, 0);
+        player1Body.angularVelocity.set(0, 0, 0);
+        player2Body.position.set(5, 1, 15);
+        player2Body.velocity.set(0, 0, 0);
+        player2Body.angularVelocity.set(0, 0, 0);
+        player3Body.position.set(-5, 1, -10);
+        player3Body.velocity.set(0, 0, 0);
+        player3Body.angularVelocity.set(0, 0, 0);
+        player4Body.position.set(5, 1, 10);
+        player4Body.velocity.set(0, 0, 0);
+        player4Body.angularVelocity.set(0, 0, 0);
+        
+        resetBall();
+        startGameTimer();
+    }
+
+    blueRestartButton.addEventListener('click', resetGame);
+    redRestartButton.addEventListener('click', resetGame);
+    drawRestartButton.addEventListener('click', resetGame);
+    
     // Three.js Scene
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x111111);
@@ -159,18 +215,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function gameOver() {
         clearInterval(timerInterval);
-        console.log('Game Over!');
         if (scorePlayer1 > scorePlayer2) {
-            console.log('Player 1 Wins!');
+            blueWinScreen.style.display = 'flex';
         } else if (scorePlayer2 > scorePlayer1) {
-            console.log('Player 2 Wins!');
+            redWinScreen.style.display = 'flex';
         } else {
-            console.log('It\'s a Draw!');
+            drawScreen.style.display = 'flex';
         }
-        // Optionally display a game over message on screen
+        scoreDisplayP1.style.display = 'none';
+        scoreDisplayP2.style.display = 'none';
+        timerDisplay.style.display = 'none';
     }
 
     function startGameTimer() {
+        clearInterval(timerInterval); // Clear any existing timer
         timerInterval = setInterval(() => {
             remainingTime--;
             updateTimerDisplay();

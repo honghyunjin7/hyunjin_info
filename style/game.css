@@ -222,7 +222,8 @@
     color: #fff;
 }
 
-#restart-btn:hover {
+
+#restart-btn:hover, .restart-btn:hover {
     transform: scale(1.05);
     box-shadow: 0 0 15px var(--skin-color);
 }
@@ -235,10 +236,25 @@
     height: 100%;
     background-color: rgba(0, 0, 0, 0.7);
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     z-index: 100;
 }
+
+.restart-btn {
+    margin-top: 20px;
+    padding: 12px 25px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid var(--skin-color);
+    background-color: var(--skin-color);
+    color: #fff;
+}
+
 
 .win-message {
     font-size: 5em;

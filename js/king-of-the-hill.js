@@ -238,6 +238,34 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    const blueRestartButton = blueWinScreen.querySelector('.restart-btn');
+    const redRestartButton = redWinScreen.querySelector('.restart-btn');
+
+    function resetGame() {
+        gameOver = false;
+        blueWinScreen.style.display = 'none';
+        redWinScreen.style.display = 'none';
+
+        // Reset physics bodies
+        player1Body.position.set(2, 0.5, 0);
+        player1Body.velocity.set(0, 0, 0);
+        player1Body.angularVelocity.set(0, 0, 0);
+        player2Body.position.set(-2, 0.5, 0);
+        player2Body.velocity.set(0, 0, 0);
+        player2Body.angularVelocity.set(0, 0, 0);
+
+        // Reset hill color
+        hill.material = neutralMaterial;
+
+        // Ensure keys are cleared
+        for (const key in keys) {
+            keys[key] = false;
+        }
+    }
+
+    blueRestartButton.addEventListener('click', resetGame);
+    redRestartButton.addEventListener('click', resetGame);
+
     // ===================================
     // ANIMATION LOOP
     // ===================================

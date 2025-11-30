@@ -208,6 +208,46 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    const blueRestartButton = blueWinScreen.querySelector('.restart-btn');
+    const redRestartButton = redWinScreen.querySelector('.restart-btn');
+
+    function resetGame() {
+        // Reset game state
+        gameOver = false;
+        gameStarted = false;
+        countdownStarted = false;
+
+        // Hide win screens
+        blueWinScreen.style.display = 'none';
+        redWinScreen.style.display = 'none';
+
+        // Reset player positions
+        player1.position.set(10, 0.5, 0);
+        player2.position.set(-10, 0.5, 0);
+
+        // Reset flags
+        if (redFlag.parent !== scene) {
+            player1.remove(redFlag);
+            scene.add(redFlag);
+        }
+        redFlag.position.copy(redFlag.originalPosition);
+
+        if (blueFlag.parent !== scene) {
+            player2.remove(blueFlag);
+            scene.add(blueFlag);
+        }
+        blueFlag.position.copy(blueFlag.originalPosition);
+
+        // Restart countdown if player is still hovering
+        if (window.activeGame === gameId) {
+            startCountdown();
+            countdownStarted = true;
+        }
+    }
+
+    blueRestartButton.addEventListener('click', resetGame);
+    redRestartButton.addEventListener('click', resetGame);
+
     // Animation loop
     function animate() {
         requestAnimationFrame(animate);
