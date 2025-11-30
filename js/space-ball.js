@@ -241,6 +241,21 @@ document.addEventListener('DOMContentLoaded', () => {
         ballBody.position.set(0, 5, 0);
         ballBody.velocity.set(0, 0, 0);
         ballBody.angularVelocity.set(0, 0, 0);
+
+        // Reset player positions and velocities
+        player1Body.position.set(-5, 1, -15);
+        player1Body.velocity.set(0, 0, 0);
+        player1Body.angularVelocity.set(0, 0, 0);
+        player2Body.position.set(5, 1, 15);
+        player2Body.velocity.set(0, 0, 0);
+        player2Body.angularVelocity.set(0, 0, 0);
+        player3Body.position.set(-5, 1, -10);
+        player3Body.velocity.set(0, 0, 0);
+        player3Body.angularVelocity.set(0, 0, 0);
+        player4Body.position.set(5, 1, 10);
+        player4Body.velocity.set(0, 0, 0);
+        player4Body.angularVelocity.set(0, 0, 0);
+
         if (scoreDisplayP1) scoreDisplayP1.textContent = `블루 팀: ${scorePlayer1}`;
         if (scoreDisplayP2) scoreDisplayP2.textContent = `레드 팀: ${scorePlayer2}`;
         updateTimerDisplay(); // Update timer display on ball reset
