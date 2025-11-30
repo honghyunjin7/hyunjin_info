@@ -119,16 +119,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const physicsWallMaterial = new CANNON.Material('wall');
 
     // Ceiling
-    const ceilingShape = new CANNON.Plane();
+    const ceilingShape = new CANNON.Box(new CANNON.Vec3(fieldWidth / 2, 1, fieldLength / 2));
     const ceilingBody = new CANNON.Body({ mass: 0, material: physicsWallMaterial });
     ceilingBody.addShape(ceilingShape);
     ceilingBody.position.set(0, fieldHeight, 0);
-    ceilingBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), Math.PI / 2); // Rotate to face downwards
     world.addBody(ceilingBody);
 
-    const ceilingMesh = new THREE.Mesh(new THREE.PlaneGeometry(fieldWidth, fieldLength), wallMaterial);
+    const ceilingMesh = new THREE.Mesh(new THREE.BoxGeometry(fieldWidth, 2, fieldLength), wallMaterial);
     ceilingMesh.position.set(0, fieldHeight, 0);
-    ceilingMesh.rotation.x = Math.PI / 2;
     scene.add(ceilingMesh);
 
     // Walls
@@ -443,6 +441,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (ballBody.velocity.length() > maxBallSpeed) {
                 ballBody.velocity.normalize();
                 ballBody.velocity.scale(maxBallSpeed, ballBody.velocity);
+            }
+
+            // Hard boundary check for ceiling
+            if (ballBody.position.y > fieldHeight) {
+                ballBody.position.y = fieldHeight;
+                ballBody.velocity.y = -Math.abs(ballBody.velocity.y);
             }
 
             // Update meshes
