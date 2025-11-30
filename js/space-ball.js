@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function resetGame() {
+        console.log("Resetting Space Ball game...");
         scorePlayer1 = 0;
         scorePlayer2 = 0;
         remainingTime = gameDuration;

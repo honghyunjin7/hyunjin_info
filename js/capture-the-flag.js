@@ -212,6 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const redRestartButton = redWinScreen.querySelector('.restart-btn');
 
     function resetGame() {
+        console.log("Resetting Capture the Flag game...");
         // Reset game state
         gameOver = false;
         gameStarted = false;
@@ -238,11 +239,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         blueFlag.position.copy(blueFlag.originalPosition);
 
-        // Restart countdown if player is still hovering
-        if (window.activeGame === gameId) {
-            startCountdown();
-            countdownStarted = true;
-        }
+        // Restart countdown
+        startCountdown();
+        countdownStarted = true;
     }
 
     blueRestartButton.addEventListener('click', resetGame);

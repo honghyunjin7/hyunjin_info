@@ -242,6 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const redRestartButton = redWinScreen.querySelector('.restart-btn');
 
     function resetGame() {
+        console.log("Resetting King of the Hill game...");
         gameOver = false;
         blueWinScreen.style.display = 'none';
         redWinScreen.style.display = 'none';
