@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
     scene.add(ceilingMesh);
 
     // Walls
-    const wallThickness = 1.0;
+    const wallThickness = 5.0;
 
     // Wall Left (Negative X)
     const wallLeftShape = new CANNON.Box(new CANNON.Vec3(wallThickness / 2, fieldHeight / 2, fieldLength / 2));
@@ -420,6 +420,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const clock = new THREE.Clock();
+    const maxBallSpeed = 50; // Add this line
+
     function animate() {
         requestAnimationFrame(animate);
         
@@ -435,6 +437,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 handleAILogic(player3Body, goal2Body.position, 'blue');
                 // Player 4 (Red AI) attacks Blue Goal (goal1Body)
                 handleAILogic(player4Body, goal1Body.position, 'red');
+            }
+
+            // Clamp ball velocity
+            if (ballBody.velocity.length() > maxBallSpeed) {
+                ballBody.velocity.normalize();
+                ballBody.velocity.scale(maxBallSpeed, ballBody.velocity);
             }
 
             // Update meshes
