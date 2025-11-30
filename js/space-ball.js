@@ -378,62 +378,44 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    function handleAILogic(playerBody, opponentGoalPosition) {
-        const aiMoveForce = 50; // Increased force for more noticeable movement
-        const aiKickStrength = 80; // Slightly stronger kick
-        const aiKickRange = 3.5; // Effective kick range
-        const maxSpeed = 10; // Maximum speed for the AI player
+    function handleAILogic(playerBody, opponentGoalPosition, playerTeam) {
+        const aiMoveSpeed = 8;
+        const aiKickStrength = 80;
+        const kickRange = 3.5;
+        const maxSpeed = 10;
 
         const playerPos = playerBody.position;
         const ballPos = ballBody.position;
 
-        // Vector from ball to the opponent's goal
-        const ballToGoal = new CANNON.Vec3();
-        opponentGoalPosition.vsub(ballPos, ballToGoal);
-        ballToGoal.y = 0; // Movement on the horizontal plane
-        ballToGoal.normalize();
+        // Determine if AI is on the correct side of the field to avoid own goals
+        const isBlueTeam = playerTeam === 'blue';
+        const isCorrectSide = isBlueTeam ? playerPos.z < ballPos.z : playerPos.z > ballPos.z;
 
-        // The ideal position for the AI is a few units behind the ball, lined up with the goal.
-        const desiredPos = ballPos.vsub(ballToGoal.scale(3.0));
+        // Vector from AI to ball
+        const toBall = ballPos.vsub(playerPos);
+        toBall.y = 0; // Ignore vertical distance
+        const distanceToBall = toBall.length();
 
-        // Vector from the AI to its desired position
-        const toDesiredPos = new CANNON.Vec3();
-        desiredPos.vsub(playerPos, toDesiredPos);
-        toDesiredPos.y = 0;
+        // Vector from ball to opponent's goal
+        const toGoal = opponentGoalPosition.vsub(ballPos);
+        toGoal.y = 0;
+        const kickDirection = toGoal.unit();
 
-        // Apply force to move towards the desired position
-        if (toDesiredPos.length() > 0.5) { // A small threshold to prevent jittering
-            const force = toDesiredPos.unit().scale(aiMoveForce);
-            playerBody.applyForce(force, playerBody.position);
+        // If ball is close enough to kick
+        if (distanceToBall < kickRange && isCorrectSide) {
+            // Apply impulse to the ball
+             ballBody.applyImpulse(kickDirection.scale(aiKickStrength), ballPos);
+        } else {
+            // Move towards the ball
+            const moveDirection = toBall.unit();
+            playerBody.velocity.x = moveDirection.x * aiMoveSpeed;
+            playerBody.velocity.z = moveDirection.z * aiMoveSpeed;
         }
 
-        // Dampen velocity to have more control and prevent overshooting.
-        // This is a crucial part of making the movement look controlled.
+        // Limit AI speed
         if (playerBody.velocity.length() > maxSpeed) {
             playerBody.velocity.normalize();
             playerBody.velocity.scale(maxSpeed, playerBody.velocity);
-        } else {
-             playerBody.velocity.scale(0.96, playerBody.velocity); // Less aggressive damping
-        }
-
-        // Kick logic
-        const toBall = new CANNON.Vec3();
-        ballPos.vsub(playerPos, toBall);
-        toBall.y = 0;
-        const distanceToBall = toBall.length();
-
-        if (distanceToBall < aiKickRange) {
-            // The kick direction should be straight towards the goal from the ball's position
-            const kickDirection = opponentGoalPosition.vsub(ballPos).unit();
-            
-            // Check if the AI is reasonably behind the ball before kicking
-            const playerToBallDir = toBall.unit();
-            // A positive dot product means the AI is generally facing the ball, and we want to kick it "through" the player.
-            // A better check is the angle between where the AI wants to go (toDesiredPos) and where the ball is.
-            // If the AI is trying to get behind the ball, it shouldn't kick yet.
-            if(playerToBallDir.dot(toDesiredPos.unit()) < 0.5) { // If ball is in front of the AI relative to its movement direction
-                 ballBody.applyImpulse(kickDirection.scale(aiKickStrength), ballBody.position);
-            }
         }
     }
 
@@ -450,9 +432,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 handleControls();
                 // Handle AI logic for Player 3 (Blue) and Player 4 (Red)
                 // Player 3 (Blue AI) attacks Red Goal (goal2Body)
-                handleAILogic(player3Body, goal2Body.position);
+                handleAILogic(player3Body, goal2Body.position, 'blue');
                 // Player 4 (Red AI) attacks Blue Goal (goal1Body)
-                handleAILogic(player4Body, goal1Body.position);
+                handleAILogic(player4Body, goal1Body.position, 'red');
             }
 
             // Update meshes
