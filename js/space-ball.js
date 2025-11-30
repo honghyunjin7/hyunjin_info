@@ -39,6 +39,11 @@ document.addEventListener('DOMContentLoaded', () => {
         timerDisplay.style.display = 'none';
     }
 
+    const player1InitialPosition = new CANNON.Vec3(-5, 1, -15);
+    const player2InitialPosition = new CANNON.Vec3(5, 1, 15);
+    const player3InitialPosition = new CANNON.Vec3(-5, 1, -10);
+    const player4InitialPosition = new CANNON.Vec3(5, 1, 10);
+
     function resetGame() {
         console.log("Resetting Space Ball game...");
         scorePlayer1 = 0;
@@ -53,16 +58,16 @@ document.addEventListener('DOMContentLoaded', () => {
         scoreDisplayP2.style.display = 'block';
         timerDisplay.style.display = 'block';
 
-        player1Body.position.set(-5, 1, -15);
+        player1Body.position.copy(player1InitialPosition);
         player1Body.velocity.set(0, 0, 0);
         player1Body.angularVelocity.set(0, 0, 0);
-        player2Body.position.set(5, 1, 15);
+        player2Body.position.copy(player2InitialPosition);
         player2Body.velocity.set(0, 0, 0);
         player2Body.angularVelocity.set(0, 0, 0);
-        player3Body.position.set(-5, 1, -10);
+        player3Body.position.copy(player3InitialPosition);
         player3Body.velocity.set(0, 0, 0);
         player3Body.angularVelocity.set(0, 0, 0);
-        player4Body.position.set(5, 1, 10);
+        player4Body.position.copy(player4InitialPosition);
         player4Body.velocity.set(0, 0, 0);
         player4Body.angularVelocity.set(0, 0, 0);
         
@@ -173,28 +178,28 @@ document.addEventListener('DOMContentLoaded', () => {
     scene.add(wallBackMesh);
 
     // Player 1 (Blue)
-    const player1Body = new CANNON.Body({ mass: 10, position: new CANNON.Vec3(-5, 1, -15), shape: new CANNON.Box(new CANNON.Vec3(1, 0.5, 2)), material: player1Mat });
+    const player1Body = new CANNON.Body({ mass: 10, position: player1InitialPosition.clone(), shape: new CANNON.Box(new CANNON.Vec3(1, 0.5, 2)), material: player1Mat });
     world.addBody(player1Body);
     const player1Mesh = new THREE.Mesh(new THREE.BoxGeometry(2, 1, 4), new THREE.MeshStandardMaterial({ color: 0x00aaff }));
     player1Mesh.castShadow = true;
     scene.add(player1Mesh);
 
     // Player 2 (Red)
-    const player2Body = new CANNON.Body({ mass: 10, position: new CANNON.Vec3(5, 1, 15), shape: new CANNON.Box(new CANNON.Vec3(1, 0.5, 2)), material: player2Mat });
+    const player2Body = new CANNON.Body({ mass: 10, position: player2InitialPosition.clone(), shape: new CANNON.Box(new CANNON.Vec3(1, 0.5, 2)), material: player2Mat });
     world.addBody(player2Body);
     const player2Mesh = new THREE.Mesh(new THREE.BoxGeometry(2, 1, 4), new THREE.MeshStandardMaterial({ color: 0xff4444 }));
     player2Mesh.castShadow = true;
     scene.add(player2Mesh);
 
     // AI Player 3 (Blue Team - AI)
-    const player3Body = new CANNON.Body({ mass: 10, position: new CANNON.Vec3(-5, 1, -10), shape: new CANNON.Box(new CANNON.Vec3(1, 0.5, 2)), material: player1Mat }); // Using player1Mat for consistency
+    const player3Body = new CANNON.Body({ mass: 10, position: player3InitialPosition.clone(), shape: new CANNON.Box(new CANNON.Vec3(1, 0.5, 2)), material: player1Mat }); // Using player1Mat for consistency
     world.addBody(player3Body);
     const player3Mesh = new THREE.Mesh(new THREE.BoxGeometry(2, 1, 4), new THREE.MeshStandardMaterial({ color: 0x00aaff })); // Blue color
     player3Mesh.castShadow = true;
     scene.add(player3Mesh);
 
     // AI Player 4 (Red Team - AI)
-    const player4Body = new CANNON.Body({ mass: 10, position: new CANNON.Vec3(5, 1, 10), shape: new CANNON.Box(new CANNON.Vec3(1, 0.5, 2)), material: player2Mat }); // Using player2Mat for consistency
+    const player4Body = new CANNON.Body({ mass: 10, position: player4InitialPosition.clone(), shape: new CANNON.Box(new CANNON.Vec3(1, 0.5, 2)), material: player2Mat }); // Using player2Mat for consistency
     world.addBody(player4Body);
     const player4Mesh = new THREE.Mesh(new THREE.BoxGeometry(2, 1, 4), new THREE.MeshStandardMaterial({ color: 0xff4444 })); // Red color
     player4Mesh.castShadow = true;
@@ -243,16 +248,16 @@ document.addEventListener('DOMContentLoaded', () => {
         ballBody.angularVelocity.set(0, 0, 0);
 
         // Reset player positions and velocities
-        player1Body.position.set(-5, 1, -15);
+        player1Body.position.copy(player1InitialPosition);
         player1Body.velocity.set(0, 0, 0);
         player1Body.angularVelocity.set(0, 0, 0);
-        player2Body.position.set(5, 1, 15);
+        player2Body.position.copy(player2InitialPosition);
         player2Body.velocity.set(0, 0, 0);
         player2Body.angularVelocity.set(0, 0, 0);
-        player3Body.position.set(-5, 1, -10);
+        player3Body.position.copy(player3InitialPosition);
         player3Body.velocity.set(0, 0, 0);
         player3Body.angularVelocity.set(0, 0, 0);
-        player4Body.position.set(5, 1, 10);
+        player4Body.position.copy(player4InitialPosition);
         player4Body.velocity.set(0, 0, 0);
         player4Body.angularVelocity.set(0, 0, 0);
 
